@@ -13,13 +13,18 @@ const createRestaurant = async (req , res) => {
     console.log(isRestaurantRegistered);
     
     try {
-        if(!req.body.restaurantName || !req.body.address || !req.body.phone || !req.body.menu || !req.body.events || !req.body.capacity || !req.body.cuisine || !req.body.priceRange || !req.body.description || !req.body.image || !req.body.rating || !req.body.user){
+
+        if(!req.body.restaurantName || !req.body.address || !req.body.phone  ||  !req.body.capacity || !req.body.cuisine || !req.body.priceRange || !req.body.description || !req.body.image || !req.body.rating || !req.body.user){
             throw new BadRequestError('Please provide all values')
           
         }
     } catch (error) {
         console.log(error);
         
+    }
+    const user = await Restaurant.findOne({user : req.user._id})
+    if(user){
+        throw new BadRequestError('You have already registered as a restaurant')
     }
     const restaurant = await Restaurant.create({...req.body})
     await User.findOneAndUpdate({_id : req.user._id} , {isRestaurantRegistered : true})
@@ -94,7 +99,7 @@ const updateRestaurant = async(req, res)=> {
 const deleteRestaurant = async (req , res) => {
     try {
         const {id : restaurantId} = req.params
-        const restaurant = await Restaurant.findOneAndRemove({_id : restaurantId})
+        const restaurant = await Restaurant.findOneAndDelete({_id : restaurantId})
         if(!restaurant){
             throw new NotFoundError(`No restaurant with id : ${restaurantId}`)
         }

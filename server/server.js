@@ -8,6 +8,7 @@ dotenv.config();
 import authRouter from './routes/auth.js'
 import restaurantRouter from './routes/restaurant.js';
 import cors from 'cors';
+import customerRouter from './routes/customer.js';
 // import userRouter from './routes/user.js';
 // import eventRouter from './routes/event.js';
 // import bookingRouter from './routes/booking.js';
@@ -26,6 +27,7 @@ const port = process.env.PORT || 3000
 //routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/restaurant' , restaurantRouter)
+app.use('/api/v1/customer' , customerRouter)
 // app.use('/api/v1/users', userRouter);
 // app.use('/api/v1/events', eventRouter);
 // app.use('/api/v1/bookings', bookingRouter);

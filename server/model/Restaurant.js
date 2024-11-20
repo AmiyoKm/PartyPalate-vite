@@ -1,113 +1,91 @@
 import mongoose from "mongoose";
 
-import User from "./user.js";
-const menuItemSchema = new mongoose.Schema({
-  
-  itemName: { type: String , unique : true},
-  price: { type: Number },
+const menuSchema = new mongoose.Schema({
+  itemName: { type: String, required: true },
+  price: { type: Number, required: true },
   description: { type: String },
   image: { type: String },
+  quantity: { type: Number, default: 1 },
+});
 
-})
+
+
 const eventSchema = new mongoose.Schema({
-  
-    eventName: { type: String },
-    date: { type: String },
-    time: { type: String , unique : true},
-    description: { type: String },
-    guests: { type: Number },
-    status : { type: String , default : 'waiting' , enum : ['waiting' , 'accepted' , 'rejected']},
-  
-})
-const orderSchema = new mongoose.Schema({
-  customerName: {
-    type: String, 
+  // Explicitly use the same ID
+  eventName: { type: String, required: true },
+  date: { type: String, required: true },
+  time: { type: String, required: true },
+  description: { type: String },
+  guests: { type: Number, required: true },
+  status: {
+    type: String,
+    enum: ["waiting", "accepted", "rejected"],
+    default: "waiting",
   },
-  customerId: {
-    type : String
+  plannedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Customer",
+    required: true,
+  },
+});
+
+const orderSchema = new mongoose.Schema({
+  // Explicitly use the same ID
+  orderedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Customer",
+    required: true,
   },
   items: [
     {
-      itemName: {
-        type: String, 
-      },
-      itemPrice: {
-        type: Number, 
-      },
-      quantity: {
-        type: Number,
-      },
+      itemName: { type: String, required: true },
+      price: { type: Number, required: true },
+      quantity: { type: Number, default: 1 },
     },
   ],
+  total: { type: Number, required: true },
   status: {
     type: String,
-    enum: ["preparing", "ready", "delivered"], 
+    enum: ["preparing", "ready", "delivered"],
+    default: "preparing",
   },
-})
+});
 
-const restaurantSchema = new mongoose.Schema(
-  {
-    restaurantName: {
-      type: String,
-      required: [true, "Please provide a restaurant name"],
-      unique: true,
-    },
-    address: {
-      type: String,
-      required: [true, "Please provide a address"],
-      unique: true,
-    },
-    phone: { type: String, required: true },
-    menu: [
-      menuItemSchema
-    ],
-    events: [
-      eventSchema
-    ],
-    orders: [
-      orderSchema
-    ],
-    
-    capacity: {
-      type: Number,
-      required: [true, "Please provide a capacity"],
-    },
-    cuisine: {
-      type: String,
-      required: [true, "Please provide a cuisine"],
-    },
-    priceRange: {
-      type: String,
-      required: [true, "Please provide a price range"],
-    },
-    description: {
-      type: String,
-      required: [true, "Please provide a description"],
-    },
-    image: {
-      type: String,
-      required: [true, "Please provide a image"],
-    },
-    openingTime: {
-      type: String,
-      required: [true, "Please provide a opening time"],
-    },
-    closingTime: {
-      type: String,
-      required: [true, "Please provide a closing time"],
-    },
-    rating: {
-      type: Number,
-      default: 0,
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    }
+const restaurantSchema = new mongoose.Schema({
+  restaurantName: {
+    type: String,
+    required: [true, "Please provide a restaurant name"],
+    unique: true,
   },
-  { timestamps: true }
-);
+  address: {
+    type: String,
+    required: [true, "Please provide an address"],
+    unique: true,
+  },
+  phone: { type: String, required: true },
+  menu: [
+    menuSchema
+  ],
+  events: [eventSchema], // Embedded events with customer reference
+  orders: [orderSchema], // Embedded orders with customer reference
+  capacity: { type: Number, required: true },
+  cuisine: { type: String, required: true },
+  priceRange: {
+    type: String,
+    enum: ["Inexpensive", "Moderate", "Expensive", "Very Expensive"],
+    required: true,
+  },
+  description: { type: String, required: true },
+  image: { type: String, required: true },
+  openingTime: { type: String, required: true },
+  closingTime: { type: String, required: true },
+  rating: { type: Number, default: 0 },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+});
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);
 export default Restaurant;

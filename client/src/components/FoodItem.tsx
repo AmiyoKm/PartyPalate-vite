@@ -6,25 +6,26 @@ import { Badge } from "@/components/ui/badge"
 import { Link } from 'react-router-dom'
 import useUserData from '@/store/auth'
 import useRestaurantInfo from '@/store/Restaurant'
+import useCart, { Item } from '@/store/Cart'
+import { useToast } from '@/hooks/use-toast'
 
 
 // Mock data for the food item
-const foodItem = {
-  id: 1,
-  name: "Spicy Grilled Salmon",
-  description: "Perfectly grilled salmon fillet with a spicy glaze, served with roasted vegetables and lemon wedge.",
-  price: 24.99,
-  image: "/placeholder.svg?height=300&width=400",
-  restaurantName: "Gourmet Delights",
-}
+
 
 export function FoodItemDetails() {
   const {user} = useUserData()
+  const {toast} = useToast()
  const  {  item , restaurantName} =  useRestaurantInfo()
+  const { addToCart} = useCart()
 
-  // useEffect( async  ()=>{
-  //   await getItem(restaurant._id, foodItem.id)
-  // },[])
+  const handleAddToCart =(item : Item)=> {
+    addToCart(item)
+    toast({
+      title : `${item.itemName} is added to the Cart`
+     
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -57,7 +58,7 @@ export function FoodItemDetails() {
             <p className="text-muted-foreground">{item.description}</p>
           </CardContent>
           <CardFooter>
-            <Button className="w-full">Add to Cart</Button>
+            <Button onClick={()=>handleAddToCart(item)} className="w-full">Add to Cart</Button>
           </CardFooter>
         </Card>
       </main>

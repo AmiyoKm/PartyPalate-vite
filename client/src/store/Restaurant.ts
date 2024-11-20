@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import axios from 'axios';
-import { it } from 'node:test';
 
 
 
-interface Restaurant {
+
+export interface Restaurant {
   _id: string;
   restaurantName: string;
   address: string;
@@ -15,6 +15,7 @@ interface Restaurant {
     description?: string;
     image?: string;
     _id: string
+    quantity : number
   }>;
   events: Array<{
     eventName: string;
@@ -51,24 +52,45 @@ interface Item {
   _id: string
   description: string
   image: string
+  quantity : number
 
 }
 
 interface RestaurantStore {
   restaurants: Restaurant[];
   loggedInRestaurant: Restaurant
+  selectedRestaurant : Restaurant
   item: Item
   restaurantName: string
   setRestaurants: (restaurant: Restaurant) => void;
   getAllRestaurants: (user: any) => Promise<void>;
   createRestaurant: (formData: any, token: string) => Promise<({ success: boolean, msg: any })>;
   getItem: (restaurantId: string, itemId: string, token: string) => Promise<void>;
+  setSelectedRestaurant : (restaurant : Restaurant) => void
 }
 
 // Zustand store
 const useRestaurantInfo = create<RestaurantStore>((set) => ({
   restaurants: [],
   loggedInRestaurant: {
+    _id: '',
+    restaurantName: '',
+    address: '',
+    phone: '',
+    menu: [],
+    events: [],
+    orders: [],
+    capacity: 0,
+    cuisine: '',
+    priceRange: '',
+    description: '',
+    image: '',
+    openingTime: '',
+    closingTime: '',
+    rating: 0,
+    isRestaurantRegistered: false
+  },
+  selectedRestaurant : {
     _id: '',
     restaurantName: '',
     address: '',
@@ -93,7 +115,8 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
     price: 0,
     _id: '',
     description: '',
-    image: ''
+    image: '',
+    quantity : 1
   },
   restaurantName: '',
 
@@ -163,7 +186,10 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
     } catch (error) {
       console.error('Error fetching item:', error);
     }
-  }
+  },
+  setSelectedRestaurant : (restaurant : Restaurant) => 
+    set((state) => ({selectedRestaurant : state.selectedRestaurant = restaurant})),
+  
 }));
 
 export default useRestaurantInfo;

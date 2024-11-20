@@ -22,6 +22,7 @@ const confirmedOrder = {
 }
 
 export function OrderConfirmedPageComponent() {
+  
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       

@@ -7,8 +7,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Utensils, User, ChefHat } from 'lucide-react'
 import useUserData from "../store/auth"
 import { useToast } from "@/hooks/use-toast"
-import { ToastAction } from "./ui/toast"
-import { Link, useNavigate } from "react-router-dom"
+
+import { useNavigate } from "react-router-dom"
 
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -49,7 +49,7 @@ export default function RegisterPage() {
           console.log(res);
           
           if(res.success){
-            navigate('/home/customer/'+res.msg.user._id)
+            navigate('/customer/register')
             toast({
               title: 'Account created successfully !',
               description: `You can now login with your credentials`,

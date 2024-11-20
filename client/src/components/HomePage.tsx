@@ -4,20 +4,36 @@ import { Button } from "./ui/button"
 import { Star } from 'lucide-react'
 import { Input } from "./ui/input"
 import { useEffect } from "react"
-import useRestaurantInfo from "@/store/Restaurant"
+import useRestaurantInfo, { Restaurant } from "@/store/Restaurant"
 import useUserData from "@/store/auth"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import useCart, { type Item } from "@/store/Cart"
+import { useToast } from "@/hooks/use-toast"
 
 
 export function HomePageComponent() {
   const navigate = useNavigate();
-   const {restaurants , getAllRestaurants , getItem} = useRestaurantInfo()
+   const {restaurants , getAllRestaurants , getItem , setSelectedRestaurant} = useRestaurantInfo()
+  const {addToCart} =useCart()
  const {user ,token} =useUserData()
+ const {toast } = useToast()
  const handleFoodItemClick = async(userId : string | undefined ,restaurantId : string ,itemId : string) =>{
   console.log(userId ,restaurantId ,itemId);
   await getItem(restaurantId ,itemId ,token)
   navigate(`/customer/${userId}/item/${restaurantId}/${itemId}`);
 
+ }
+ const handleAdd = (restaurant : Restaurant ,item : Item)=>{
+  addToCart(item )
+  toast({
+    title : `${item.itemName} is added to the Cart`,
+    description : 'You can add more items to the cart'
+  })
+  setSelectedRestaurant(restaurant)
+ }
+ const handleSelectedRestaurant = (restaurant : Restaurant)=>{
+  setSelectedRestaurant(restaurant)
+  navigate(`/customer/${user?._id}/restaurant/${restaurant._id}`)
  }
  useEffect(() => {
   const fetchRestaurants = async () => {
@@ -42,7 +58,7 @@ export function HomePageComponent() {
             {restaurants.map((restaurant) => (
               <div key={restaurant._id} className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
                 <div className="px-4 py-5 sm:px-6 flex items-center justify-between">
-                  <div className="flex items-center">
+                  <div onClick={()=>handleSelectedRestaurant(restaurant)} className="flex items-center">
                     <img src={restaurant.image} alt={`${restaurant.restaurantName} logo`} className="h-12 w-12 rounded-full mr-4" />
                     <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                       {restaurant.restaurantName}
@@ -56,8 +72,9 @@ export function HomePageComponent() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
                   {restaurant.menu.map((item) => (
                     // <Link to={`/customer/${user._id}/item/${restaurant._id}/${item._id}`}>
-                    <Card onClick={()=>handleFoodItemClick(user._id,restaurant._id , item._id)} key={item._id} className="overflow-hidden flex flex-col hover:scale-105 transition-all duration-300">
-                      <CardHeader className="p-0">
+                    <Card className="overflow-hidden flex flex-col hover:scale-105 cursor-pointer transition-all duration-300">
+                      <div onClick={()=>handleFoodItemClick(user._id , restaurant._id , item._id)} >
+                      <CardHeader  className="p-0">
                         <img
                           src={item.image}
                           alt={item.itemName}
@@ -69,8 +86,10 @@ export function HomePageComponent() {
                         <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{item.description}</p>
                         <p className="font-bold text-lg mb-2">${item.price.toFixed(2)}</p>
                       </CardContent>
+                      </div>
+                      
                       <CardFooter className="p-4 pt-0">
-                        <Button className="w-full">Add to Cart</Button>
+                        <Button onClick={()=>handleAdd(restaurant ,item)} className="w-full">Add to Cart</Button>
                       </CardFooter>
                     </Card>
                     // </Link>

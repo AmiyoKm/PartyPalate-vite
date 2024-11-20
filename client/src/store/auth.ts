@@ -18,6 +18,7 @@ interface UserData {
     register: (formData: User) => Promise<({ success: boolean; msg: any })>;
     login : (email : string , password : string , role : string) => Promise<({ success: boolean; msg: any })>
     logout : () => void
+    createCustomer : (formData : any , token :string) =>  Promise<({ success: boolean; msg: any })>
 }
  const useUserData = create<UserData>((set)=>({
     user : {
@@ -71,6 +72,20 @@ interface UserData {
             }
         }))
         
+    },
+    createCustomer : async (formData , token) => {
+        try {
+            const res =   await axios.post('/api/v1/customer', formData , {
+                headers : {
+                    Authorization : `Bearer ${token}`
+                }
+            })
+            
+            console.log(res.data);
+            return { success : true , msg : res.data}
+        } catch (error) {
+            return { success : false , msg : 'Something went wrong'}
+        }
     }
 
 }))

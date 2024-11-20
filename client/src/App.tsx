@@ -18,6 +18,8 @@ import { FoodItemDetails } from './components/FoodItem'
 import { RestaurantDetails } from './components/RestaurantDetails'
 import { PaymentPageComponent } from './components/PaymentPage'
 import { OrderConfirmedPageComponent } from './components/orderConfirmed'
+import { RestaurantMenuForCustomer } from './components/RestaurantMenuForCustomer'
+import { CustomerRegister } from './components/CustomerRegister'
 
 function App() {
   const location = useLocation()
@@ -36,6 +38,8 @@ function App() {
       
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/customer/register" element={<CustomerRegister />} />
+      <Route path='/register/restaurant' element={<RestaurantRegister/>} />
       <Route path="/home/customer/:id" element={<HomePageComponent />} />
       <Route path="/cart/customer/:id" element={<Cart />} />
       <Route path="/event-planning/customer/:id" element={<EventPlanning />} />
@@ -43,11 +47,11 @@ function App() {
       <Route path="/profile/customer/:id" element={<CustomerProfile />} />
       <Route path="/profile/restaurant/:id" element={<RestaurantProfile />} />
       <Route path="/dashboard/restaurant/:id" element={<RestaurantDashboard />} />
-      <Route path='/register/restaurant' element={<RestaurantRegister/>} />
-      <Route path='/customer/:id/item/:restaurantId/:itemId' element={<FoodItemDetails/>} />
       <Route path='/event-planning/customer/:id/:restaurantId' element={<RestaurantDetails/>} />
       <Route path='/customer/payment/:id' element={<PaymentPageComponent/>} />
-      <Route path='/customer/:id/order/:orderId' element={<OrderConfirmedPageComponent/>} />
+      <Route path='/customer/:id/order' element={<OrderConfirmedPageComponent/>} />
+      <Route path='/customer/:id/restaurant/:restaurantId' element={<RestaurantMenuForCustomer/>} />
+      <Route path='/customer/:id/item/:restaurantId/:itemId' element={<FoodItemDetails/>} />
 
     </Routes>
     </ThemeProvider>

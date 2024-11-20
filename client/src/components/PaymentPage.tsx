@@ -1,22 +1,28 @@
-import React from 'react'
+
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { CreditCard, Calendar, Lock } from 'lucide-react'
+import { CreditCard, Calendar, Lock} from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
+ 
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import useCart from '@/store/Cart'
+import { useNavigate } from 'react-router-dom'
+import useUserData from '@/store/auth'
+import { FaArrowLeft } from 'react-icons/fa'
+import useRestaurantInfo from '@/store/Restaurant'
+
 
 
 const formSchema = z.object({
@@ -26,19 +32,16 @@ const formSchema = z.object({
   cvv: z.string().regex(/^\d{3,4}$/, { message: "CVV must be 3 or 4 digits" }),
 })
 
-// Mock data for order summary
-const orderSummary = {
-  subtotal: 89.97,
-  tax: 7.20,
-  total: 97.17,
-  items: [
-    { name: "Spicy Grilled Salmon", quantity: 2, price: 24.99 },
-    { name: "Chocolate Lava Cake", quantity: 1, price: 9.99 },
-    { name: "Caesar Salad", quantity: 2, price: 15.00 },
-  ]
-}
+
 
 export function PaymentPageComponent() {
+  const navigate = useNavigate()
+  const {cart , payment} = useCart()
+  const {selectedRestaurant} = useRestaurantInfo()
+  const {user , token} = useUserData()
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const tax = total * 0.07
+  const grandTotal = total + tax
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,16 +51,20 @@ export function PaymentPageComponent() {
       cvv: "",
     },
   })
+//values: z.infer<typeof formSchema>
+ async function onSubmit() {
+   await payment(cart , selectedRestaurant , token , grandTotal)
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Here you would typically process the payment
-    console.log(values)
+    console.log(cart ,selectedRestaurant , token)
+
+    navigate(`/customer/${user?._id}/order/`)
   }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       
       <main className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div className='flex items-center mb-6 cursor-pointer' onClick={() => navigate(`/cart/customer/${user?._id}`)} ><FaArrowLeft /> <span className='ml-2 font-bold text-lg'>Go To Cart</span></div>
         <h1 className="text-3xl font-bold mb-6">Complete Your Order</h1>
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
@@ -131,7 +138,9 @@ export function PaymentPageComponent() {
                       )}
                     />
                   </div>
-                  <Button type="submit" className="w-full">Pay ${orderSummary.total.toFixed(2)}</Button>
+                  
+                  <Button type="submit" className="w-full">Pay ${grandTotal.toFixed(2)}</Button>
+                  
                 </form>
               </Form>
             </CardContent>
@@ -143,9 +152,9 @@ export function PaymentPageComponent() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {orderSummary.items.map((item, index) => (
+                {cart.map((item, index) => (
                   <li key={index} className="flex justify-between">
-                    <span>{item.quantity}x {item.name}</span>
+                    <span>{item.quantity}x {item.itemName}</span>
                     <span>${(item.quantity * item.price).toFixed(2)}</span>
                   </li>
                 ))}
@@ -154,15 +163,15 @@ export function PaymentPageComponent() {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>${orderSummary.subtotal.toFixed(2)}</span>
+                  <span>${total.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Tax</span>
-                  <span>${orderSummary.tax.toFixed(2)}</span>
+                  <span>${tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-bold">
                   <span>Total</span>
-                  <span>${orderSummary.total.toFixed(2)}</span>
+                  <span>${grandTotal.toFixed(2)}</span>
                 </div>
               </div>
             </CardContent>
