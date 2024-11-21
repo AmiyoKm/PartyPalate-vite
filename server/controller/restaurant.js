@@ -26,8 +26,12 @@ const createRestaurant = async (req , res) => {
     if(user){
         throw new BadRequestError('You have already registered as a restaurant')
     }
-    const restaurant = await Restaurant.create({...req.body})
+    const userJwt = User.findOneAndUpdate({_id : req.user._id})
+
+    
+    const restaurant = await Restaurant.create({...req.body , _id : req.user._id})
     await User.findOneAndUpdate({_id : req.user._id} , {isRestaurantRegistered : true})
+   // const token = userJwt.createJWT()
     console.log(isRestaurantRegistered);
     res.status(StatusCodes.CREATED).json({restaurant})
    

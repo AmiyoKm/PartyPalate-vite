@@ -36,7 +36,7 @@ const formSchema = z.object({
 
 export function PaymentPageComponent() {
   const navigate = useNavigate()
-  const {cart , payment} = useCart()
+  const {cart , payment , orderConfirmed} = useCart()
   const {selectedRestaurant} = useRestaurantInfo()
   const {user , token} = useUserData()
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -56,7 +56,7 @@ export function PaymentPageComponent() {
    await payment(cart , selectedRestaurant , token , grandTotal)
 
     console.log(cart ,selectedRestaurant , token)
-
+    await orderConfirmed()
     navigate(`/customer/${user?._id}/order/`)
   }
 

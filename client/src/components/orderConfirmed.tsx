@@ -1,28 +1,20 @@
-import React from 'react'
-import { Check, ChevronRight, Clock, MapPin } from 'lucide-react'
+
+import { Check, MapPin } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import useCart from '@/store/Cart'
+import useUserData from '@/store/auth'
+import { Link } from 'react-router-dom'
 
 
-// Mock data for the confirmed order
-const confirmedOrder = {
-  orderNumber: "ORD-12345",
-  restaurantName: "Gourmet Delights",
-  estimatedDeliveryTime: "30-45 minutes",
-  deliveryAddress: "123 Main St, Anytown, AN 12345",
-  items: [
-    { name: "Spicy Grilled Salmon", quantity: 2, price: 24.99 },
-    { name: "Chocolate Lava Cake", quantity: 1, price: 9.99 },
-    { name: "Caesar Salad", quantity: 2, price: 15.00 },
-  ],
-  subtotal: 89.97,
-  tax: 7.20,
-  total: 97.17,
-}
 
 export function OrderConfirmedPageComponent() {
-  
+  const {  order}= useCart()
+  const {user}= useUserData()
+  const total = order.items.reduce((sum ,item)=> sum + item.price * item.quantity , 0)
+  const tax = total * 0.07
+  const grandTotal = total + tax
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       
@@ -34,31 +26,25 @@ export function OrderConfirmedPageComponent() {
             </div>
             <CardTitle className="text-2xl font-bold">Order Confirmed!</CardTitle>
             <CardDescription>
-              Your order #{confirmedOrder.orderNumber} has been placed successfully.
+              Your order {`${order._id}`} has been placed successfully.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Clock className="w-5 h-5 text-muted-foreground" />
-                <span>Estimated Delivery Time:</span>
-              </div>
-              <span className="font-semibold">{confirmedOrder.estimatedDeliveryTime}</span>
-            </div>
+           
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <MapPin className="w-5 h-5 text-muted-foreground" />
                 <span>Delivery Address:</span>
               </div>
-              <span className="font-semibold">{confirmedOrder.deliveryAddress}</span>
+             {/* <span className="font-semibold">{confirmedOrder.deliveryAddress}</span> */}
             </div>
             <Separator />
             <div>
               <h3 className="font-semibold mb-2">Order Summary</h3>
               <ul className="space-y-2">
-                {confirmedOrder.items.map((item, index) => (
+                {order.items.map((item, index) => (
                   <li key={index} className="flex justify-between">
-                    <span>{item.quantity}x {item.name}</span>
+                    <span>{item.quantity}x {item.itemName}</span>
                     <span>${(item.quantity * item.price).toFixed(2)}</span>
                   </li>
                 ))}
@@ -68,26 +54,33 @@ export function OrderConfirmedPageComponent() {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>${confirmedOrder.subtotal.toFixed(2)}</span>
+                <span>${total.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Tax</span>
-                <span>${confirmedOrder.tax.toFixed(2)}</span>
+                <span>${tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold">
                 <span>Total</span>
-                <span>${confirmedOrder.total.toFixed(2)}</span>
+                <span>${grandTotal.toFixed(2)}</span>
               </div>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button className="w-full">
+            <Link to={`/customer/${user._id}/orders`}>
               Track Order
-              <ChevronRight className="w-4 h-4 ml-2" />
+              {/* <ChevronRight className="w-4 h-4 ml-2" /> */}
+              </Link>
             </Button>
+           
             <Button variant="outline" className="w-full">
+            <Link to={`/home/customer/${user._id}`}>
               Return to Home
+              </Link>
             </Button>
+          
+            
           </CardFooter>
         </Card>
       </main>

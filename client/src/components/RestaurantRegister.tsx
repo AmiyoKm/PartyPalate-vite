@@ -70,7 +70,7 @@ export function RestaurantRegister() {
   const navigate =useNavigate()
   const {toast} = useToast()
   const {user} = useUserData()
-  const {createRestaurant , loggedInRestaurant} = useRestaurantInfo()
+  const {createRestaurant } = useRestaurantInfo()
   const {token} = useUserData()
 
   const form = useForm<z.infer<typeof formSchema>>({

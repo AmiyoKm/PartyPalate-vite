@@ -20,4 +20,14 @@ const getAllOrders = async(req , res)=>{
     }
     res.status(StatusCodes.OK).json({orders : customer.orders})
 }
-export { createOrderCustomer , getAllOrders}
+
+const getSingleOrder = async(req , res)=>{
+  const {id : customerId , orderId}= req.params
+  const customer = await Customer.findOne({_id : customerId , "orders._id" : orderId} , {"orders.$" : 1})
+
+  if(!customer){
+    throw new  BadRequestError("customer doesn't exist")
+  }
+  res.status(StatusCodes.OK).json({order : customer.orders})
+}
+export { createOrderCustomer , getAllOrders ,getSingleOrder}

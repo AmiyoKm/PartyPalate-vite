@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError } from "../errors/index.js";
 import Customer from "../model/Customer.js";
 import Restaurant from "../model/Restaurant.js"
+import mongoose from "mongoose";
 
 
 const getOrders = async(req,res) =>{
@@ -14,24 +15,59 @@ const getOrders = async(req,res) =>{
     console.log(restaurant.orders);
     
     res.status(StatusCodes.OK).json({ orders: restaurant.orders });
-
+ 
 }
 
-const createOrder = async(req,res) =>{
-    const { items , total , status} = req.body
-    const  { restaurantId : restaurantId} = req.params
-    const userId = req.user._id
-    const restaurant = await Restaurant.findOneAndUpdate({ _id : restaurantId}, { $push : {orders : {items , total , status , orderedBy : userId}}},{ new : true , runValidators : true})
-    const customer = await Customer.findOneAndUpdate({ _id : userId}, { $push : {orders : {items , total , status , restaurant : restaurantId}}},{ new : true , runValidators : true})
-    if(!customer || !restaurant){
-        throw new BadRequestError("customer or restaurant doesn't exist")
+const createOrder = async (req, res) => {
+    const { items, total, status } = req.body;
+    const { restaurantId } = req.params;
+    const userId = req.user._id;
+  
+    // Create the new order object with a generated _id
+    const newOrder = {
+      _id: new mongoose.Types.ObjectId(), // Generate a new ObjectId
+      items,
+      total,
+      status,
+      orderedBy: userId,
+      restaurant: restaurantId,
+    };
+  
+    // Add the new order to the restaurant's orders
+    const restaurant = await Restaurant.findOneAndUpdate(
+      { _id: restaurantId },
+      { $push: { orders: newOrder } },
+      { new: true, runValidators: true }
+    );
+  
+    // Add the new order to the customer's orders
+    const customerOrder = {
+      _id: newOrder._id, // Use the same _id
+      items,
+      total,
+      status,
+      restaurant: restaurantId,
+    };
+  
+    const customer = await Customer.findOneAndUpdate(
+      { _id: userId },
+      { $push: { orders: customerOrder } },
+      { new: true, runValidators: true }
+    );
+  
+    // Check for errors
+    if (!customer || !restaurant) {
+      throw new BadRequestError("Customer or restaurant doesn't exist");
     }
-    if(!restaurant){
-        throw new NotFoundError(`No restaurant with id : ${restaurantId}`)
+  
+    if (!restaurant) {
+      throw new NotFoundError(`No restaurant with id: ${restaurantId}`);
     }
-    
-    res.status(StatusCodes.OK).json({orders : restaurant.orders})
-}
+  
+    // Return the newly created order with its _id
+    res.status(StatusCodes.OK).json({ order: customerOrder });
+  };
+  
 
 const singleOrder = async(req,res)=>{
     const { id : restaurantId , orderId} = req.params

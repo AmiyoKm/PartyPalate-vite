@@ -1,16 +1,22 @@
 import BadRequestError from '../errors/bad-request.js'
 import NotFoundError from '../errors/not-found.js'
 import Customer from '../model/Customer.js'
+import User from '../model/user.js'
+
 
 import { StatusCodes } from 'http-status-codes'
 const createCustomer = async (req,res)=>{
-    
+    const {isCustomerRegistered} = req.user
     req.body.user = req.user._id
+  
     const customerExist =await Customer.findOne({user : req.user._id})
     if(customerExist){
         throw new BadRequestError("Customer already exist")
     } 
+    const user = await User.findOne({_id : req.user._id})
+    const token = await user.createJWT()
     const customer = await Customer.create({...req.body , _id : req.user._id})
+    await User.findOneAndUpdate({_id : req.user._id} , {isCustomerRegistered : true})
     res.status(StatusCodes.CREATED).json({customer})
 }
 const getAllCustomers = async (req,res)=>{

@@ -34,7 +34,11 @@ const userSchema = new mongoose.Schema({
       isRestaurantRegistered: { 
         type: Boolean, 
         default: false
-     }
+     },
+     isCustomerRegistered: { 
+        type: Boolean, 
+        default: false
+     },
       
 
 },{ discriminatorKey: "kind",timestamps : true})

@@ -84,10 +84,13 @@ export function NavbarComponent() {
                   
                 </DropdownMenuItem>
                 </Link>
-                <DropdownMenuItem>
+                <Link to={`/${user.role === 'customer' ? 'customer' : 'restaurant'}/${user._id}/orders`}>
+                <DropdownMenuItem >
                   <ClipboardList className="mr-2 h-4 w-4" />
                   <span>Orders</span>
                 </DropdownMenuItem>
+                </Link>
+                
                 <DropdownMenuItem>
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>

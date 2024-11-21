@@ -58,7 +58,7 @@ export function HomePageComponent() {
             {restaurants.map((restaurant) => (
               <div key={restaurant._id} className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
                 <div className="px-4 py-5 sm:px-6 flex items-center justify-between">
-                  <div onClick={()=>handleSelectedRestaurant(restaurant)} className="flex items-center">
+                  <div onClick={()=>handleSelectedRestaurant(restaurant)} className="flex rounded-lg items-center hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-4">
                     <img src={restaurant.image} alt={`${restaurant.restaurantName} logo`} className="h-12 w-12 rounded-full mr-4" />
                     <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                       {restaurant.restaurantName}

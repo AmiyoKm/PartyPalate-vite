@@ -1,49 +1,20 @@
-import React from 'react'
+import  { useEffect } from 'react'
 import { Package } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import useUserData from '@/store/auth'
+import useCart from '@/store/Cart'
 
 
-// Define the order status enum
-type OrderStatus = "preparing" | "ready" | "delivered"
 
-// Mock data for customer orders
-const customerOrders = [
-  {
-    orderId: "ORD-001",
-    total: 97.17,
-    status: "preparing" as OrderStatus,
-    items: [
-      { name: "Spicy Grilled Salmon", quantity: 2 },
-      { name: "Chocolate Lava Cake", quantity: 1 },
-      { name: "Caesar Salad", quantity: 2 },
-    ],
-  },
-  {
-    orderId: "ORD-002",
-    total: 54.99,
-    status: "ready" as OrderStatus,
-    items: [
-      { name: "Margherita Pizza", quantity: 1 },
-      { name: "Tiramisu", quantity: 2 },
-      { name: "Garlic Bread", quantity: 1 },
-    ],
-  },
-  {
-    orderId: "ORD-003",
-    total: 82.50,
-    status: "delivered" as OrderStatus,
-    items: [
-      { name: "Beef Tenderloin", quantity: 1 },
-      { name: "Truffle Fries", quantity: 1 },
-      { name: "Cheesecake", quantity: 1 },
-    ],
-  },
-]
+ type OrderStatus = "preparing" | "ready" | "delivered"
 
-export function CustomerOrdersPageComponent() {
+
+export function CustomerOrders() {
+  const {user, token} = useUserData()
+  const {orders , getALlOrders} = useCart()
   const getStatusColor = (status: OrderStatus) => {
     switch (status) {
       case "preparing":
@@ -57,18 +28,32 @@ export function CustomerOrdersPageComponent() {
     }
   }
 
+
+  useEffect(()=> {
+    async function fetchOrders() {
+    try {
+      await getALlOrders(user , token)
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
+    }
+    fetchOrders()  
+  },[])
+  const reversedOrders = [...orders].reverse();
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
      
       <main className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
         <div className="grid gap-6">
-          {customerOrders.map((order) => (
-            <Card key={order.orderId}>
+          {reversedOrders.map((order) => (
+            <Card key={order._id}>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <CardTitle className="text-xl">Order {order.orderId}</CardTitle>
+                    <CardTitle className="text-xl">Order {order._id}</CardTitle>
                     <Badge className={`${getStatusColor(order.status)} text-white`}>
                       {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </Badge>
@@ -90,7 +75,7 @@ export function CustomerOrdersPageComponent() {
                     <TableBody>
                       {order.items.map((item, index) => (
                         <TableRow key={index}>
-                          <TableCell>{item.name}</TableCell>
+                          <TableCell>{item.itemName}</TableCell>
                           <TableCell className="text-right">{item.quantity}</TableCell>
                         </TableRow>
                       ))}
@@ -101,7 +86,7 @@ export function CustomerOrdersPageComponent() {
             </Card>
           ))}
         </div>
-        {customerOrders.length === 0 && (
+        {orders.length === 0 && (
           <Card className="text-center py-8">
             <CardContent>
               <Package className="mx-auto h-12 w-12 text-muted-foreground" />
