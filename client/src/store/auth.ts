@@ -23,13 +23,20 @@ interface Customer {
 interface Restaurant {
     _id: string;
     restaurantName: string;
+    image: string;
     address: string;
     phone: string;
+    description : string
+    priceRange : string
+    cuisine : string
+    capacity : number
+    openingTime : string
+    closingTime : string
     menu: Array<{
         itemName: string;
         price: number;
-        description?: string;
-        image?: string;
+        description: string;
+        image: string;
         _id: string
         quantity : number
     }>;
@@ -49,6 +56,8 @@ interface Restaurant {
             _id: string
             quantity : number
         }>;
+        name : string
+        orderedBy : string
         total: number;
         status: string;
         _id: string;
@@ -65,6 +74,12 @@ interface UserData {
     logout : () => void
     createCustomer : (formData : any , token :string) =>  Promise<({ success: boolean; msg: any })>
     updateCustomer : (formData : any ,user: any, token : string) => Promise<({ success: boolean; msg: any })> 
+    addItem : (restaurantId : string , item : any , token : string) => Promise<({ success: boolean; msg: any })>
+    deleteItem : (restaurantId : string ,itemId : string , token : string) => Promise<({ success: boolean; msg: any })>
+    updateItem : (restaurantId : string ,itemId : string , item : any , token : string) => Promise<({ success: boolean; msg: any })>
+    updateOrder : (restaurantId : string ,orderId : string , order : any , token : string) => Promise<({ success: boolean; msg: any })>
+    deleteOrder : (restaurantId : string ,orderId : string , token : string) => Promise<({ success: boolean; msg: any })>
+    updateRestaurant : (restaurantId : string , formData : any , token : string) => Promise<({ success: boolean; msg: any })>
 }
  const useUserData = create<UserData>((set)=>({
     user : {
@@ -91,10 +106,18 @@ interface UserData {
       _id: '',
       restaurantName: '',
       address: '',
+      image : '',
       phone: '',
+      description : '',
+      priceRange : '',
+      cuisine : '',
+      capacity : 0,
+      openingTime : '',
+    closingTime : '',
       menu: [],
       events: [],
-      orders: [],  
+      orders: [],
+      orderedBy : '',  
     },
     setUser : (user) => set({user}),
     register : async (formData)=> {
@@ -163,6 +186,40 @@ interface UserData {
                 
             }
         }))
+        set((state)=> ({
+            token : state.token = ''
+        }))
+        set((state)=> ({
+            customer : state.customer = {
+                name : '',
+                bio : '',
+                phone : '',
+                address : '',
+                _id : '',
+                events : [],
+                orders : [],
+                favoriteRestaurants : []
+            }
+        }))
+        set((state)=> ({
+            restaurant : state.restaurant = {
+                _id: '',
+                restaurantName: '',
+                address: '',
+                image : '',
+                phone: '',
+                description : '',
+                priceRange : '',
+                cuisine : '',
+                capacity : 0,
+                openingTime : '',
+              closingTime : '',
+                menu: [],
+                events: [],
+                orders: [],
+                
+            }
+        }))
         
     },
     createCustomer : async (formData , token) => {
@@ -195,7 +252,98 @@ interface UserData {
             console.log(error);
             return { success : false , msg : "Something went wrong"}
         }
+    },
+    addItem : async (restaurantId , item , token) =>{
+        try {
+          const res = await axios.post(`/api/v1/restaurant/${restaurantId}/menu`, item, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          })
+          set((state)=> ({ restaurant : state.restaurant = res.data.restaurant}))
+          return  { success : true , msg : res.data}
+        } catch (error) {
+            return  { success : false , msg : 'Something went wrong'}
+          
+          
+        }
+      },
+      deleteItem : async (restaurantId , itemId , token) => {
+        try {
+          const res = await axios.delete(`/api/v1/restaurant/${restaurantId}/menu/${itemId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          })
+          set((state)=> ({ restaurant : state.restaurant = res.data.restaurant}))
+          return  { success : true , msg : res.data}
+        } catch (error) {
+            return  { success : false , msg : 'Something went wrong'}
+          
+          
+        }
+      },
+      updateItem : async (restaurantId , itemId , item , token) => {
+            try {
+                const res = await axios.patch(`/api/v1/restaurant/${restaurantId}/menu/${itemId}`, {item : item}, {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    }
+                })
+                set((state)=> ({ restaurant : state.restaurant = res.data.restaurant}))
+                return  { success : true , msg : res.data}
+            } catch (error) {
+                return  { success : false , msg : 'Something went wrong'}
+            }
+
+},    updateOrder : async (restaurantId , orderId , order , token) => {
+    
+     try {
+        const res = await axios.patch(`/api/v1/restaurant/${restaurantId}/orders/${orderId}`, {order : order}, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+        })
+        set((state)=> ({ restaurant : state.restaurant = res.data.restaurant}))
+        return  { success : true , msg : res.data}
+    } catch (error) {
+        return  { success : false , msg : 'Something went wrong'}
     }
+       
+
+},
+    deleteOrder : async (restaurantId , orderId , token) => {
+        try {
+            const res = await axios.delete(`/api/v1/restaurant/${restaurantId}/orders/${orderId}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                }
+            })
+            set((state)=> ({ restaurant : state.restaurant = res.data.restaurant}))
+            return  { success : true , msg : res.data}
+        } catch (error) {
+            return  { success : false , msg : 'Something went wrong'}
+        }
+
+},
+    updateRestaurant : async (restaurantId , formData , token) => {
+        try {
+            const res = await axios.patch(`/api/v1/restaurant/${restaurantId}` , formData ,{
+                headers : {
+                    Authorization : `Bearer ${token}`
+                }
+            } )
+            set((state)=> ({ restaurant : state.restaurant = res.data.restaurant}))
+            return { success : true , msg : res.data}
+        } catch (error) {   
+            return { success : false , msg : 'Something went wrong'}
+        }
+    }
+
+
+
+
+
 
 }))
 

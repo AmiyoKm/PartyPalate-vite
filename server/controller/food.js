@@ -45,10 +45,10 @@ const updateItem = async (req, res) => {
     if (!restaurant) {
       throw new NotFoundError(`No item with id : ${itemId}`);
     }
-    const updatedRestaurant = restaurant.menu.find(
-      (item) => item._id.toString() === itemId.toString()
-    );
-    res.status(StatusCodes.OK).json({ item: updatedRestaurant });
+    // const updatedRestaurant = restaurant.menu.find(
+    //   (item) => item._id.toString() === itemId.toString()
+    // );
+    res.status(StatusCodes.OK).json({ restaurant: restaurant });
   } catch (error) {
     throw new NotFoundError(`No item with id : ${itemId}`);
   }
@@ -63,7 +63,7 @@ const deleteItem = async (req, res) => {
     if (!restaurant) {
       throw new NotFoundError(`No item with id : ${itemId}`);
     }
-    res.status(StatusCodes.OK).json({ menu : restaurant.menu });
+    res.status(StatusCodes.OK).json({ restaurant : restaurant });
   } catch (error) {
     console.log(error);
     

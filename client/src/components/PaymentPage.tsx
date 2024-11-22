@@ -51,9 +51,9 @@ export function PaymentPageComponent() {
       cvv: "",
     },
   })
-//values: z.infer<typeof formSchema>
- async function onSubmit() {
-   await payment(cart , selectedRestaurant , token , grandTotal)
+//
+ async function onSubmit(values: z.infer<typeof formSchema>) {
+   await payment(values.cardName ,cart , selectedRestaurant , token , grandTotal)
 
     console.log(cart ,selectedRestaurant , token)
     await orderConfirmed()

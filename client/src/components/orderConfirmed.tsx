@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom'
 
 export function OrderConfirmedPageComponent() {
   const {  order}= useCart()
-  const {user}= useUserData()
+  const {user ,customer}= useUserData()
   const total = order.items.reduce((sum ,item)=> sum + item.price * item.quantity , 0)
   const tax = total * 0.07
   const grandTotal = total + tax
@@ -36,7 +36,7 @@ export function OrderConfirmedPageComponent() {
                 <MapPin className="w-5 h-5 text-muted-foreground" />
                 <span>Delivery Address:</span>
               </div>
-             {/* <span className="font-semibold">{confirmedOrder.deliveryAddress}</span> */}
+             <span className="font-semibold">{customer.address}</span>
             </div>
             <Separator />
             <div>

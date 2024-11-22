@@ -54,14 +54,20 @@ const getSingleRestaurant = async (req , res) => {
 const addItem = async (req , res) => {
     try {
         const {id : restaurantId} = req.params
-        const {item} = req.body
-        if(!item) {
-            throw new BadRequestError('Please provide all values')}
-        const menu = await Restaurant.findOneAndUpdate({_id : restaurantId} , {$push : {menu : item}}, { new : true , runValidator : true})
-        if(!menu){
+        // const {item} = req.body
+        // console.log(item);
+        
+        // if(!item) {
+        //     throw new BadRequestError('Please provide all values')}
+            const restaurant = await Restaurant.findOneAndUpdate(
+                { _id: restaurantId },
+                { $push: { menu: req.body } },
+                { new: true, runValidators: true }
+            );
+        if(!restaurant){
             throw new NotFoundError(`No menu with id : ${restaurantId}`)
         }
-        res.status(StatusCodes.OK).json({menu})
+        res.status(StatusCodes.OK).json({restaurant})
     } catch (error) {
         console.error(error);
         

@@ -9,17 +9,26 @@ const getOrders = async(req,res) =>{
     const {id : restaurantId} = req.params
     
     const restaurant = await Restaurant.findOne({_id : restaurantId})
+   // console.log(restaurant.orders);
+    
+    // const ordersWithCustomer = await Promise.all(
+    //   restaurant.orders.map(async(order)=> {
+    //    let  customer = await Customer.findOne({_id : order.orderedBy})
+    //     return {...order.toObject() , customer : customer || null}
+    //   })
+    // )
     if(!restaurant){
         throw new NotFoundError(`No restaurant with id : ${restaurantId}`)
 }
-    console.log(restaurant.orders);
+    //console.log(restaurant.orders);
+   // console.log(ordersWithCustomer);
     
     res.status(StatusCodes.OK).json({ orders: restaurant.orders });
  
 }
 
 const createOrder = async (req, res) => {
-    const { items, total, status } = req.body;
+    const { items, total, status , name } = req.body;
     const { restaurantId } = req.params;
     const userId = req.user._id;
   
@@ -27,6 +36,7 @@ const createOrder = async (req, res) => {
     const newOrder = {
       _id: new mongoose.Types.ObjectId(), // Generate a new ObjectId
       items,
+      name,
       total,
       status,
       orderedBy: userId,
@@ -82,20 +92,23 @@ const updateOrder = async(req,res)=>{
     const { id : restaurantId , orderId} = req.params
 
     const {order} = req.body
-
+    console.log(order);
+    
     const restaurant = await Restaurant.findOneAndUpdate({_id : restaurantId , "orders._id": orderId}, { $set : {"orders.$.status": order.status}}, { new : true , runValidators : true})
+    const customer = await Customer.findOneAndUpdate({_id : order.orderedBy , "orders._id": orderId}, { $set : {"orders.$.status": order.status}}, { new : true , runValidators : true})
     if(!restaurant){
         throw new NotFoundError(`No order with id : ${orderId}`)
     }
-    res.status(StatusCodes.OK).json({orders : restaurant.orders})
+    res.status(StatusCodes.OK).json({restaurant : restaurant})
 }
 const deleteOrder = async(req,res)=>{
     const { id : restaurantId , orderId} = req.params
     const restaurant = await Restaurant.findOneAndUpdate({_id : restaurantId , "orders._id": orderId}, { $pull : {"orders": { _id : orderId}}}, { new : true , runValidators : true})
+    // const customer = await Customer.findOneAndUpdate({_id : restaurantId , "orders._id": orderId}, { $pull : {"orders": { _id : orderId}}}, { new : true , runValidators : true})
     if(!restaurant){
         throw new NotFoundError(`No order with id : ${orderId}`)
     }
-    res.status(StatusCodes.OK).json({orders : restaurant.orders})
+    res.status(StatusCodes.OK).json({restaurant : restaurant})
 }
 
 export {deleteOrder , updateOrder , singleOrder,getOrders , createOrder}

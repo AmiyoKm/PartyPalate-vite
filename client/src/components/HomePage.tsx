@@ -17,10 +17,11 @@ export function HomePageComponent() {
   const {addToCart} =useCart()
  const {user ,token} =useUserData()
  const {toast } = useToast()
- const handleFoodItemClick = async(userId : string | undefined ,restaurantId : string ,itemId : string) =>{
-  console.log(userId ,restaurantId ,itemId);
-  await getItem(restaurantId ,itemId ,token)
-  navigate(`/customer/${userId}/item/${restaurantId}/${itemId}`);
+ const handleFoodItemClick = async(userId : string | undefined ,restaurant : any ,itemId : string) =>{
+  console.log(userId ,restaurant._id ,itemId);
+  await getItem(restaurant._id ,itemId ,token)
+  setSelectedRestaurant(restaurant)
+  navigate(`/customer/${userId}/item/${restaurant._id}/${itemId}`);
 
  }
  const handleAdd = (restaurant : Restaurant ,item : Item)=>{
@@ -73,7 +74,7 @@ export function HomePageComponent() {
                   {restaurant.menu.map((item) => (
                     // <Link to={`/customer/${user._id}/item/${restaurant._id}/${item._id}`}>
                     <Card className="overflow-hidden flex flex-col hover:scale-105 cursor-pointer transition-all duration-300">
-                      <div onClick={()=>handleFoodItemClick(user._id , restaurant._id , item._id)} >
+                      <div onClick={()=>handleFoodItemClick(user._id , restaurant , item._id)} >
                       <CardHeader  className="p-0">
                         <img
                           src={item.image}

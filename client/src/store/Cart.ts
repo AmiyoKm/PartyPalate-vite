@@ -30,7 +30,7 @@ interface useCart {
     removeFromCart: (item: Item) => void
     addOneItemIntoCart: (item: Item) => void
     removeOneItemFromCart: (item: Item) => void
-    payment: (cart : any ,selectedRestaurant: any , token : string , total : number) => Promise<void>
+    payment: (name : string,cart : any ,selectedRestaurant: any , token : string , total : number) => Promise<void>
     orderConfirmed : () => Promise<void>
     getALlOrders : (user : any , token : string) => Promise<void>
 }
@@ -95,12 +95,14 @@ const useCart = create<useCart>((set) => ({
             return { cart: updateCart }
         })
     },
-    payment: async(cart , selectedRestaurant: any, token : string , total) => {
+    payment: async(name ,cart , selectedRestaurant: any, token : string , total) => {
        
         try {
-            const res =await axios.post(`/api/v1/customer/${selectedRestaurant._id}/orders`, { 
+            const res =await axios.post(`/api/v1/customer/${selectedRestaurant._id}/orders`, {
+                name : name ,
                 items : cart ,
-                total} ,{
+                total
+            } ,{
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

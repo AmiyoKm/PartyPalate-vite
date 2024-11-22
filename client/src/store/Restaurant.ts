@@ -188,8 +188,11 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
     }
   },
   setSelectedRestaurant : (restaurant : Restaurant) => 
-    set((state) => ({
-      selectedRestaurant : state.selectedRestaurant = restaurant})),
+    set((state) => ({selectedRestaurant : state.selectedRestaurant = restaurant}
+
+    )),
+
+
   
 }));
 

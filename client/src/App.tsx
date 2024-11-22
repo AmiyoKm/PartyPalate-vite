@@ -21,6 +21,7 @@ import { OrderConfirmedPageComponent } from './components/orderConfirmed'
 import { RestaurantMenuForCustomer } from './components/RestaurantMenuForCustomer'
 import { CustomerRegister } from './components/CustomerRegister'
 import { CustomerOrders } from './components/CustomerOrders'
+import { RestaurantMenu } from './components/RestaurantMenu'
 
 function App() {
   const location = useLocation()
@@ -54,6 +55,9 @@ function App() {
       <Route path='/customer/:id/restaurant/:restaurantId' element={<RestaurantMenuForCustomer/>} />
       <Route path='/customer/:id/item/:restaurantId/:itemId' element={<FoodItemDetails/>} />
       <Route path='/customer/:id/orders' element={<CustomerOrders/>} />
+      <Route path='/restaurant/:id/menu' element={<RestaurantMenu/>} />
+
+      
     
 
     </Routes>

@@ -36,6 +36,7 @@ const orderSchema = new mongoose.Schema({
     ref: "Customer",
     required: true,
   },
+  name : { type: String, required: true },
   items: [
     {
       itemName: { type: String, required: true },
@@ -46,7 +47,7 @@ const orderSchema = new mongoose.Schema({
   total: { type: Number, required: true },
   status: {
     type: String,
-    enum: ["preparing", "ready", "delivered"],
+    //enum: ["preparing", "ready", "delivered"],
     default: "preparing",
   },
 });
