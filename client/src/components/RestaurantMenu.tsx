@@ -17,16 +17,14 @@ import useUserData from '@/store/auth'
 export function RestaurantMenu() {
   const {restaurant ,addItem ,token ,deleteItem , updateItem} = useUserData()
   
-  //const [menuItems, setMenuItems] = useState(restaurant.menu)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
- // const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+
   const [currentItem, setCurrentItem] = useState({
     _id : '',
     itemName: '',
     description: '',
     price: 0,
     image: '',
-    //quantity : 0
   })
 
   const handleAddItem = async (e: React.FormEvent<HTMLFormElement>) => {

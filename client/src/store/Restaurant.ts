@@ -60,6 +60,7 @@ interface RestaurantStore {
   restaurants: Restaurant[];
   loggedInRestaurant: Restaurant
   selectedRestaurant : Restaurant
+  selectedRestaurantForPlanning : Restaurant
   item: Item
   restaurantName: string
   setRestaurants: (restaurant: Restaurant) => void;
@@ -67,11 +68,30 @@ interface RestaurantStore {
   createRestaurant: (formData: any, token: string) => Promise<({ success: boolean, msg: any })>;
   getItem: (restaurantId: string, itemId: string, token: string) => Promise<void>;
   setSelectedRestaurant : (restaurant : Restaurant) => void
+  setSelectedRestaurantForPlanning : (restaurant : Restaurant) => void
 }
 
 // Zustand store
 const useRestaurantInfo = create<RestaurantStore>((set) => ({
   restaurants: [],
+  selectedRestaurantForPlanning : {
+    _id: '',
+    restaurantName: '',
+    address: '',
+    phone: '',
+    menu: [],
+    events: [],
+    orders: [],
+    capacity: 0,
+    cuisine: '',
+    priceRange: '',
+    description: '',
+    image: '',
+    openingTime: '',
+    closingTime: '',
+    rating: 0,
+    isRestaurantRegistered: false
+  },
   loggedInRestaurant: {
     _id: '',
     restaurantName: '',
@@ -190,6 +210,9 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
   setSelectedRestaurant : (restaurant : Restaurant) => 
     set((state) => ({selectedRestaurant : state.selectedRestaurant = restaurant}
 
+    )),
+    setSelectedRestaurantForPlanning : (restaurant : Restaurant) => 
+    set((state) => ({selectedRestaurantForPlanning : state.selectedRestaurantForPlanning = restaurant}
     )),
 
 

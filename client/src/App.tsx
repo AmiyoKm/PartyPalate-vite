@@ -22,6 +22,8 @@ import { RestaurantMenuForCustomer } from './components/RestaurantMenuForCustome
 import { CustomerRegister } from './components/CustomerRegister'
 import { CustomerOrders } from './components/CustomerOrders'
 import { RestaurantMenu } from './components/RestaurantMenu'
+import ConfirmEvent from './components/ConfirmEvent'
+import { EventConfirmation } from './components/EventConfirmation'
 
 function App() {
   const location = useLocation()
@@ -36,8 +38,7 @@ function App() {
     {shouldHideNavbar && <NavbarComponent />}
    
     <Routes>
-      <Route path="/" element={<LandingPageComponent />} />
-      
+      <Route path="/" element={<LandingPageComponent />} />  
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/customer/register" element={<CustomerRegister />} />
@@ -50,16 +51,15 @@ function App() {
       <Route path="/profile/restaurant/:id" element={<RestaurantProfile />} />
       <Route path="/dashboard/restaurant/:id" element={<RestaurantDashboard />} />
       <Route path='/event-planning/customer/:id/:restaurantId' element={<RestaurantDetails/>} />
+      <Route path='/event-planning/customer/:id/:restaurantId/confirm-event' element={<ConfirmEvent />} />
+      <Route path='/event-planning/customer/:id/:restaurantId/confirmation' element={<EventConfirmation />} />
       <Route path='/customer/payment/:id' element={<PaymentPageComponent/>} />
       <Route path='/customer/:id/order' element={<OrderConfirmedPageComponent/>} />
       <Route path='/customer/:id/restaurant/:restaurantId' element={<RestaurantMenuForCustomer/>} />
       <Route path='/customer/:id/item/:restaurantId/:itemId' element={<FoodItemDetails/>} />
       <Route path='/customer/:id/orders' element={<CustomerOrders/>} />
       <Route path='/restaurant/:id/menu' element={<RestaurantMenu/>} />
-
-      
-    
-
+      EventConfirmation
     </Routes>
     </ThemeProvider>
     </>

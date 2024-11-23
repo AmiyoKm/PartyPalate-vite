@@ -7,7 +7,7 @@ interface User {
     password: string;
     confirmPassword: string;
     role: string;
-    _id ?: string;
+    _id : string;
    
 }
 interface Customer {
@@ -16,7 +16,17 @@ interface Customer {
     phone : string
     address : string
     _id ?: string
-    events : []
+    events : Array<{
+        eventName: string;
+        date: string;
+        time: string;
+        description?: string;
+        _id: string;
+        planner : string;
+        guests : number
+        restaurantName : string
+        status : string
+    }>
     orders : []
     favoriteRestaurants : []
 }
@@ -46,6 +56,10 @@ interface Restaurant {
         time: string;
         description?: string;
         _id: string;
+        planner : string
+        guests : number
+        status : string
+        plannedBy : string
     }>;
     orders: Array<{
         items: Array<{
@@ -63,11 +77,24 @@ interface Restaurant {
         _id: string;
     }>;
 }
+interface ConfirmedEvent{
+    eventName : string
+    date : string
+    time : string
+   
+    description : string
+    guests : number
+    plannerName : string
+    cardNumber : string
+    expiryDate : string
+    cvv : string
+} 
 interface UserData {
     user: User;
     token : string;
     customer : Customer
     restaurant : Restaurant
+    confirmedEvent : ConfirmedEvent
     setUser: (users: User) => void;
     register: (formData: User) => Promise<({ success: boolean; msg: any })>;
     login : (email : string , password : string , role : string) => any
@@ -80,6 +107,10 @@ interface UserData {
     updateOrder : (restaurantId : string ,orderId : string , order : any , token : string) => Promise<({ success: boolean; msg: any })>
     deleteOrder : (restaurantId : string ,orderId : string , token : string) => Promise<({ success: boolean; msg: any })>
     updateRestaurant : (restaurantId : string , formData : any , token : string) => Promise<({ success: boolean; msg: any })>
+    createEvent : (restaurantId : string , formData : any , token : string) => Promise<({ success: boolean; msg: any })>
+    updateEventForRestaurant : (restaurantId : string , event : any , token : string) => Promise<({ success: boolean; msg: any })>
+    updateEventForCustomer : ( userId : string , event : any , token : string) => Promise<({ success: boolean; msg: any })>
+    deleteEvent : (restaurantId : string , eventId : string , token : string) => Promise<({ success: boolean; msg: any })>
 }
  const useUserData = create<UserData>((set)=>({
     user : {
@@ -87,7 +118,8 @@ interface UserData {
         email : '',
         password : '',
         confirmPassword : '',
-        role : ''
+        role : '',
+        _id : ''
        
        
     },
@@ -119,6 +151,17 @@ interface UserData {
       orders: [],
       orderedBy : '',  
     },
+    confirmedEvent : {
+        eventName : '',
+        date : '',
+        time : '',
+        description : '',
+        guests : 0,
+        plannerName : '',
+        cardNumber : '',
+        expiryDate : '',
+        cvv : ''
+    },
     setUser : (user) => set({user}),
     register : async (formData)=> {
         try {
@@ -138,7 +181,7 @@ interface UserData {
         if(role === 'customer'){
             try {
                 const res =   await axios.post('/api/v1/auth/login', {email , password , role})
-                console.log(res.data);
+                //console.log(res.data);
                 set(state =>({ user : state.user =res.data.user}))
                 set(state =>({ token : state.token =res.data.token}))
                 
@@ -156,7 +199,7 @@ interface UserData {
         }else if(role ==='restaurant'){
             try {
                 const res =   await axios.post('/api/v1/auth/login', {email , password , role})
-                console.log(res.data);
+                //console.log(res.data);
                 set(state =>({ user : state.user =res.data.user}))
                 set(state =>({ token : state.token =res.data.token}))
                 
@@ -183,6 +226,7 @@ interface UserData {
                 password : '',
                 confirmPassword : '',
                 role : '',
+                _id : ''
                 
             }
         }))
@@ -223,8 +267,17 @@ interface UserData {
         
     },
     createCustomer : async (formData , token) => {
+        console.log(formData);
         try {
-            const res =   await axios.post('/api/v1/customer', formData , {
+            
+            const res =   await axios.post('/api/v1/customer', 
+                {
+                    name : formData.name,
+                    bio : formData.bio,
+                    phone : formData.phone,
+                    address : formData.address
+                }
+                , {
                 headers : {
                     Authorization : `Bearer ${token}`
                 }
@@ -338,14 +391,76 @@ interface UserData {
         } catch (error) {   
             return { success : false , msg : 'Something went wrong'}
         }
-    }
+    },
+    createEvent : async (restaurantId , event , token) => {
+        console.log(event);
+        
+        try {
+            const res = await axios.post(`/api/v1/restaurant/${restaurantId}/event` , {event : event} ,{
+                headers : {
+                    Authorization : `Bearer ${token}`
+                }
+            } )
+            //set((state)=> ({ restaurant : state.restaurant = res.data.restaurant}))
+            set((state)=> ({customer : state.customer = res.data.customer}))
+            set((state)=> ({ confirmedEvent : state.confirmedEvent = event}))
+            return { success : true , msg : res.data}
+        } catch (error) {   
+            return { success : false , msg : 'Something went wrong'}
+        }
+    },
+    updateEventForRestaurant : async ( restaurantId ,  event , token) => {
+        try {
+            const res = await axios.patch(`/api/v1/restaurant/${restaurantId}/event/${event._id}` , {event : event} ,{
+                headers : {
+                    Authorization : `Bearer ${token}`
+                }
+            } )
+            
+            set((state)=> ({restaurant : state.restaurant = res.data.restaurant}))
+            //set((state)=> ({ confirmedEvent : state.confirmedEvent = event}))
+            return { success : true , msg : res.data}
+        } catch (error) {   
+            return { success : false , msg : 'Something went wrong'}
+        }
+
+
+    },
+    updateEventForCustomer : async ( userId , event , token) => {
+        try {
+            const res = await axios.patch(`/api/v1/customer/${userId}/events/${event._id}` , {event : event} ,{
+                headers : {
+                    Authorization : `Bearer ${token}`
+                }
+            } )
+            set((state)=> ({customer : state.customer = res.data.customer}))
+            return { success : true , msg : res.data}
+        } catch (error) {
+            return { success : false , msg : 'Something went wrong'}
+        }
+    },
+    deleteEvent : async (restaurantId , eventId , token) => {
+        try {
+            const res = await axios.delete(`/api/v1/restaurant/${restaurantId}/event/${eventId}` , {
+                headers : {
+                    Authorization : `Bearer ${token}`
+                }
+            })
+            set((state)=> ({restaurant : state.restaurant = res.data.restaurant}))
+            return { success : true , msg : res.data}
+        } catch (error) {
+            return { success : false , msg : 'Something went wrong'}
+        }
+
+
+}
 
 
 
+}
 
 
-
-}))
+))
 
 
 export default useUserData

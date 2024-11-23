@@ -5,20 +5,46 @@ import User from '../model/user.js'
 
 
 import { StatusCodes } from 'http-status-codes'
-const createCustomer = async (req,res)=>{
-    const {isCustomerRegistered} = req.user
-    req.body.user = req.user._id
+const createCustomer = async (req, res) => {
+    try {
+      const { isCustomerRegistered } = req.user;
+      if (isCustomerRegistered) {
+        throw new BadRequestError("Customer is already registered");
+      }
   
-    const customerExist =await Customer.findOne({user : req.user._id})
-    if(customerExist){
-        throw new BadRequestError("Customer already exist")
-    } 
-    const user = await User.findOne({_id : req.user._id})
-    const token = await user.createJWT()
-    const customer = await Customer.create({...req.body , _id : req.user._id})
-    await User.findOneAndUpdate({_id : req.user._id} , {isCustomerRegistered : true})
-    res.status(StatusCodes.CREATED).json({customer})
-}
+      req.body.user = req.user._id; 
+      
+      const existingCustomer = await Customer.findOne({ _id: req.user._id });
+      if (existingCustomer) {
+        throw new BadRequestError("Customer already exists with this ID");
+      }
+  
+      const newCustomer = {
+        _id: req.user._id, 
+        user: req.user._id,
+        name: req.body.name,
+        phone: req.body.phone,
+        bio: req.body.bio,
+        address: req.body.address,
+      };
+  
+      console.log("Creating new customer:", newCustomer);
+  
+      const customer = await Customer.create({ ...newCustomer });
+  
+      
+      await User.findOneAndUpdate(
+        { _id: req.user._id },
+        { isCustomerRegistered: true }
+      );
+  
+      res.status(StatusCodes.CREATED).json({ customer });
+    } catch (error) {
+      console.error("Error creating customer:", error.message);
+      res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+    }
+  };
+  
 const getAllCustomers = async (req,res)=>{
     const customer = await Customer.find({})
 

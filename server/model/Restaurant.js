@@ -12,6 +12,10 @@ const menuSchema = new mongoose.Schema({
 
 const eventSchema = new mongoose.Schema({
   // Explicitly use the same ID
+  planner : {
+    type : String,
+    required: true,
+  },
   eventName: { type: String, required: true },
   date: { type: String, required: true },
   time: { type: String, required: true },
@@ -19,7 +23,7 @@ const eventSchema = new mongoose.Schema({
   guests: { type: Number, required: true },
   status: {
     type: String,
-    enum: ["waiting", "accepted", "rejected"],
+    enum: ["waiting", "accepted", "rejected" , "cancelled" , "completed"],
     default: "waiting",
   },
   plannedBy: {

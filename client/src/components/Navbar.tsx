@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { Button } from "./ui/button"
 import {
   DropdownMenu,
@@ -8,13 +8,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
-import { Utensils, Heart, Calendar, ShoppingCart, ClipboardList, Settings, LogOut } from 'lucide-react'
+import { Utensils, Heart, Calendar, ShoppingCart, ClipboardList,  LogOut } from 'lucide-react'
 import { FaUser } from "react-icons/fa";
 import { VscAccount } from "react-icons/vsc";
 
 import { ModeToggle } from './mode-toggle';
 import { Link, useNavigate } from 'react-router-dom';
 import useUserData from '@/store/auth';
+import { MdOutlineEventAvailable } from "react-icons/md";
 
 export function NavbarComponent() {
   const navigate = useNavigate()
@@ -38,6 +39,17 @@ export function NavbarComponent() {
           </div>
           </Link>
           <div className='flex justify-between items-center'>
+          {
+              user.role === 'customer' ? <div>
+              <Link  to={`/event-planning/customer/${user._id}`} >
+              <div className='hover:cursor-pointer bg-primary text-foreground dark:bg-gray-900 h-[40px] w-24 flex items-center justify-center rounded-md mr-4'>
+              <MdOutlineEventAvailable size={70} color='white' className="mr-2 h-6 w-6" />
+              </div>
+              </Link>
+              
+             
+            </div> : null
+            }
             {
               user.role === 'customer' ? <div>
               <Link to={`/cart/customer/${user._id}`} >
@@ -75,26 +87,33 @@ export function NavbarComponent() {
                   <Heart className="mr-2 h-4 w-4" />
                   <span>Favorites</span>
                 </DropdownMenuItem>
-                <Link to={`/event-planning/customer/${user._id}`}>
-                <DropdownMenuItem>
-                
-                <Calendar className="mr-2 h-4 w-4" />
-                <span>Event Planning</span>
-               
+                { user.role === 'customer' && (
+                   <Link to={`/event-management/customer/${user._id}`}>
+                   <DropdownMenuItem>
+                   
+                   <Calendar className="mr-2 h-4 w-4" />
+                   <span>Your Events</span>
                   
-                </DropdownMenuItem>
-                </Link>
-                <Link to={`/${user.role === 'customer' ? 'customer' : 'restaurant'}/${user._id}/orders`}>
-                <DropdownMenuItem >
-                  <ClipboardList className="mr-2 h-4 w-4" />
-                  <span>Orders</span>
-                </DropdownMenuItem>
-                </Link>
+                     
+                   </DropdownMenuItem>
+                   </Link>
+                )}
+                {
+                  user.role === 'customer' && (
+                    <Link to={`/customer/${user._id}/orders`}>
+                    <DropdownMenuItem >
+                      <ClipboardList className="mr-2 h-4 w-4" />
+                      <span>Orders</span>
+                    </DropdownMenuItem>
+                    </Link>
+                  )
+                }
                 
-                <DropdownMenuItem>
+                
+                {/* <DropdownMenuItem>
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogOut}>
                   <LogOut className="mr-2 h-4 w-4" />

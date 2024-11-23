@@ -1,19 +1,42 @@
-import React from 'react'
+
 import { Button } from "./ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card"
+import { Card, CardContent, CardDescription,CardHeader, CardTitle } from "./ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 import { Badge } from "./ui/badge"
 import { Calendar, Clock, Users, MapPin } from 'lucide-react'
+import useUserData from '@/store/auth'
 
-
-// Mock data for booked events
-const bookedEvents = [
-  { id: 1, name: "Wedding Anniversary", date: "2023-08-15", time: "18:00", guests: 50, location: "Grand Ballroom", status: "Upcoming" },
-  { id: 2, name: "Corporate Seminar", date: "2023-07-22", time: "09:00", guests: 100, location: "Conference Center", status: "Completed" },
-  { id: 3, name: "Birthday Bash", date: "2023-09-03", time: "20:00", guests: 30, location: "Rooftop Lounge", status: "Upcoming" },
-]
 
 export function EventManagement() {
+ const {customer , updateEventForCustomer , token , user} = useUserData()
+ const handleStatusColor = (status : string)=>{
+  switch(status) {
+    case "waiting" : return "outline"
+    case "accepted" : return "secondary"
+    case "rejected" : return "destructive"
+    case "cancelled" : return "destructive"
+    case "completed" : return "default"
+  }
+ }
+ const upcomingEvents = () => {
+  let number = 0
+
+  customer.events.forEach((event)=> {
+    if(event.status ==="accepted") number++
+
+  })
+  return number
+ }
+ const totalGuests =()=> {
+  const number = customer.events.reduce((sum , event)=> sum + event.guests , 0)
+  return number
+ }
+ async function handleUpdateEventStatus(event : any , status : string) {
+   const updatedEvent = { ...event , status : status}
+   console.log(updatedEvent);
+   
+   await updateEventForCustomer(user._id , updatedEvent , token)
+ }
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
    
@@ -39,9 +62,9 @@ export function EventManagement() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {bookedEvents.map((event) => (
-                      <TableRow key={event.id}>
-                        <TableCell>{event.name}</TableCell>
+                    {customer.events.map((event) => (
+                      <TableRow key={event._id}>
+                        <TableCell>{event.eventName}</TableCell>
                         <TableCell>
                           <div className="flex items-center">
                             <Calendar className="w-4 h-4 mr-2" />
@@ -61,16 +84,16 @@ export function EventManagement() {
                         <TableCell>
                           <div className="flex items-center">
                             <MapPin className="w-4 h-4 mr-2" />
-                            {event.location}
+                            {event.restaurantName}
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant={event.status === "Upcoming" ? "default" : "secondary"}>
+                          <Badge variant={handleStatusColor(event.status) }>
                             {event.status}
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Button variant="outline" size="sm">View Details</Button>
+                          <Button onClick={()=> handleUpdateEventStatus(event , event.status==='cancelled' ? "waiting" : "cancelled")}  variant={event.status !== "cancelled" ? "destructive" : "default"} size="sm">{event.status !== "cancelled" ? "Cancel" : "Undo"}</Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -91,8 +114,8 @@ export function EventManagement() {
                       <Calendar className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">12</div>
-                      <p className="text-xs text-muted-foreground">+2 from last month</p>
+                      <div className="text-2xl font-bold">{customer.events.length}</div>
+                      
                     </CardContent>
                   </Card>
                   <Card>
@@ -101,8 +124,8 @@ export function EventManagement() {
                       <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">4</div>
-                      <p className="text-xs text-muted-foreground">2 this week</p>
+                      <div className="text-2xl font-bold">{upcomingEvents()}</div>
+                      
                     </CardContent>
                   </Card>
                   <Card>
@@ -111,8 +134,8 @@ export function EventManagement() {
                       <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">621</div>
-                      <p className="text-xs text-muted-foreground">+120 from last month</p>
+                      <div className="text-2xl font-bold">{totalGuests()}</div>
+                     
                     </CardContent>
                   </Card>
                 </div>

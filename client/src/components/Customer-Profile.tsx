@@ -6,15 +6,15 @@ import { Textarea } from "./ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card"
 
 
-import { User, Mail, Phone, MapPin, Calendar, Edit2, Save, Clock, Utensils } from 'lucide-react'
+import { User,  Phone, MapPin,  Edit2, Save, } from 'lucide-react'
 import useUserData from '@/store/auth'
-import useCart from '@/store/Cart'
+
 
 
 export function CustomerProfile() {
 
   const {user ,updateCustomer , customer ,token} =useUserData()
-  const {orders} =useCart()
+
   const [customerData, setCustomerData] = useState(customer)
   const [isEditing, setIsEditing] = useState(false)
 

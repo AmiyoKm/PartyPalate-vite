@@ -1,14 +1,14 @@
-import React from 'react'
+
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Building2, MapPin, Phone, Users, Utensils, DollarSign, Clock, ImageIcon, Star } from 'lucide-react'
+import { Building2, MapPin, Phone, Users, Utensils,  Clock, ImageIcon, Star } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  // FormDescription,
+
   FormField,
   FormItem,
   FormLabel,
@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription,  CardHeader, CardTitle } from "@/components/ui/card"
 import useRestaurantInfo from '@/store/Restaurant'
 import useUserData from '@/store/auth'
 import { useNavigate } from 'react-router-dom'
@@ -69,7 +69,7 @@ const formSchema = z.object({
 export function RestaurantRegister() {
   const navigate =useNavigate()
   const {toast} = useToast()
-  const {user} = useUserData()
+ // const {user} = useUserData()
   const {createRestaurant } = useRestaurantInfo()
   const {token} = useUserData()
 
@@ -207,22 +207,6 @@ export function RestaurantRegister() {
                     </FormItem>
                   )}
                 />
-                 {/* <FormField
-                  control={form.control}
-                  name="cuisine"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Price Range</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <DollarSign className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-                          <Input type='number' placeholder="Enter Price Range" className="pl-8" {...field} />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
                 <FormField
                   control={form.control}
                   name="priceRange"

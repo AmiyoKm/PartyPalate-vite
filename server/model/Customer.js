@@ -8,6 +8,7 @@ const eventSchema = new mongoose.Schema({
     ref: "Restaurant", // Reference to the restaurant
     required: true,
   },
+  restaurantName : { type: String, required: true },
   eventName: { type: String, required: true },
   date: { type: String, required: true },
   time: { type: String, required: true },
@@ -15,7 +16,7 @@ const eventSchema = new mongoose.Schema({
   guests: { type: Number, required: true },
   status: {
     type: String,
-    enum: ["waiting", "accepted", "rejected"],
+    enum: ["waiting", "accepted", "rejected" ,"cancelled" , "completed"],
     default: "waiting",
   },
   
@@ -49,7 +50,7 @@ const customerSchema = new mongoose.Schema({
   _id : mongoose.Schema.Types.ObjectId,
   name: { type: String, required: true },
   bio: { type: String },
-  phone: { type: String, required: true, unique: true },
+  phone: { type: String, required: true },
   address: { type: String, required: true,  },
   orders: [orderSchema], // Embedded orders with restaurant reference
   events: [eventSchema], // Embedded events with restaurant reference

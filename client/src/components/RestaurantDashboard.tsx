@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { Calendar, Clock, Users, Utensils, Plus, Trash2 } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+
+import { Calendar, Clock, Users,  Trash2 } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -10,73 +10,27 @@ import { Link } from 'react-router-dom'
 import useUserData from '@/store/auth'
 
 
-// Types for our data
-type Event = {
-  id: number
-  name: string
-  date: string
-  time: string
-  guests: number
-  status: string
-}
-
-type Order = {
-  id?: string
-  customerName: string
-  items: string[]
-  total: number
-  status: string
-}
-
-// Placeholder functions for API calls
-const fetchEvents = async (): Promise<Event[]> => {
-  // Replace with actual API call
-  return [
-    { id: 1, name: "Corporate Dinner", date: "2023-07-15", time: "19:00", guests: 50, status: "Pending" },
-    { id: 2, name: "Wedding Reception", date: "2023-07-20", time: "18:00", guests: 100, status: "Confirmed" },
-    { id: 3, name: "Birthday Party", date: "2023-07-22", time: "20:00", guests: 30, status: "Pending" },
-    { id: 4, name: "Charity Gala", date: "2023-07-25", time: "19:30", guests: 80, status: "Confirmed" },
-    { id: 5, name: "Product Launch", date: "2023-07-28", time: "18:30", guests: 60, status: "Pending" },
-  ]
-}
-
-
-
-
 
 export function RestaurantDashboard() {
-  const {user , token ,restaurant , updateOrder ,deleteOrder} = useUserData() 
+  const { token ,restaurant , updateOrder ,deleteOrder ,updateEventForRestaurant ,deleteEvent ,user } = useUserData() 
 
-  const [events, setEvents] = useState<Event[]>([])
+  
 
-
-  // useEffect(() => {
-  //   const loadData = async () => {
-  //     const [eventData, orderData] = await Promise.all([fetchEvents(), fetchOrders()])
-  //     setEvents(eventData)
-  //     setOrders(orderData)
-  //   }
-  //   loadData()
-  // }, [])
 
  
 
-  const handleUpdateEventStatus = async (id: number, newStatus: string) => {
-
-    setEvents(events.map(event => 
-      event.id === id ? { ...event, status: newStatus } : event
-    ))
+  const handleUpdateEventStatus = async ( event : any , value : string) => {
+    const updatedEvent = { ...event , status : value}
+    updateEventForRestaurant(restaurant._id , updatedEvent , token)
   }
 
-  const handleDeleteEvent = async (id: number) => {
+  const handleDeleteEvent = async (event :any) => {
+    deleteEvent(user._id , event._id , token) 
    
-    setEvents(events.filter(event => event.id !== id))
   }
 
   const handleUpdateOrderStatus = async (order : any , id: string, newStatus: string ) => {
-    // setOrders(restaurant.orders.map(order => 
-    //   order._id === id ? { ...order, status: newStatus } : order
-    // ))
+ 
     console.log(order);
     
     const updatedOrder = {...order , status : newStatus}
@@ -87,7 +41,6 @@ export function RestaurantDashboard() {
 
   const handleDeleteOrder = async (id: string) => {
     deleteOrder(restaurant._id , id , token)
-    //setOrders(restaurant.orders.filter(order => order._id !== id))
   }
 
   return (
@@ -110,12 +63,15 @@ export function RestaurantDashboard() {
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[400px] pr-4">
-                {events.map((event) => (
-                  <div key={event.id} className=" mb-4 p-4 border rounded-lg">
+                {restaurant.events.map((event) => (
+                  <div key={event._id} className=" mb-4 p-4 border rounded-lg">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold">{event.name}</h3>
+                        <h3 className="font-semibold">{event.eventName}</h3>
                         <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <div className="flex items-center mt-1">
+                             Planned By : {event.planner} 
+                          </div>
                           <div className="flex items-center mt-1">
                             <Calendar className="w-4 h-4 mr-1" />
                             {event.date}
@@ -128,6 +84,7 @@ export function RestaurantDashboard() {
                             <Users className="w-4 h-4 mr-1" />
                             {event.guests} guests
                           </div>
+                          
                         </div>
                       </div>
                       <div className="flex flex-col items-end space-y-2">
@@ -136,16 +93,18 @@ export function RestaurantDashboard() {
                         </Badge> */}
                         <Select
                         
-                          onValueChange={(value) => handleUpdateEventStatus(event.id, value)}
-                          defaultValue={event.status}
+                        value={event.status}
+                          onValueChange={(value) => handleUpdateEventStatus(event , value)}
                         >
                           <SelectTrigger className="w-[120px]">
                             <SelectValue placeholder="Update status" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Pending">Pending</SelectItem>
-                            <SelectItem value="Confirmed">Confirmed</SelectItem>
-                            <SelectItem value="Cancelled">Cancelled</SelectItem>
+                            <SelectItem value="waiting">Pending</SelectItem>
+                            <SelectItem value="accepted">Accept</SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            {/* <SelectItem value="cancelled">Cancelled</SelectItem> */}
+                            <SelectItem value="rejected">Reject</SelectItem>
                           </SelectContent>
                         </Select>
                         <AlertDialog>
@@ -164,7 +123,7 @@ export function RestaurantDashboard() {
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDeleteEvent(event.id)}>
+                              <AlertDialogAction onClick={() => handleDeleteEvent(event)}>
                                 Delete
                               </AlertDialogAction>
                             </AlertDialogFooter>

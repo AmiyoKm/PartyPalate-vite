@@ -19,7 +19,8 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "customer"
+    role: "customer",
+    _id : ""
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
 
