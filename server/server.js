@@ -17,7 +17,19 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://trusted-script-source.com"],
+        styleSrc: ["'self'", "'unsafe-inline'"], // Allows inline styles if needed
+        imgSrc: ["*"],
+        connectSrc: ["'self'", "https://api.example.com"], // For API calls
+      },
+    },
+  })
+);
 
 // Configure CORS for production
 // const corsOptions = {
@@ -42,18 +54,18 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/restaurant', restaurantRouter);
 app.use('/api/v1/customer', customerRouter);
 
-// Error handling middleware
-app.use(notFound);
-app.use(errorHandlerMiddleware);
-
-console.log(path.join(__dirname, '/client/dist') , process.env.FRONTEND_URL , process.env.NODE_ENV, path.resolve(__dirname, "client", "dist", "index.html"));
-
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/client/dist')));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
   });
 }
+// Error handling middleware
+app.use(notFound);
+app.use(errorHandlerMiddleware);
+
+console.log(path.join(__dirname, '/client/dist') , process.env.FRONTEND_URL , process.env.NODE_ENV, path.resolve(__dirname, "client", "dist", "index.html"));
+
 
 // Start the server
 const start = async (port) => {
