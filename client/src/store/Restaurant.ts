@@ -65,7 +65,7 @@ interface RestaurantStore {
   restaurantName: string
   setRestaurants: (restaurant: Restaurant) => void;
   getAllRestaurants: (user: any) => Promise<void>;
-  createRestaurant: (formData: any, token: string) => Promise<({ success: boolean, msg: any })>;
+  //createRestaurant: (formData: any, token: string) => Promise<({ success: boolean, msg: any })>;
   getItem: (restaurantId: string, itemId: string, token: string) => Promise<void>;
   setSelectedRestaurant : (restaurant : Restaurant) => void
   setSelectedRestaurantForPlanning : (restaurant : Restaurant) => void
@@ -167,23 +167,7 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
       console.error('Error fetching restaurants:', error);
     }
   },
-  createRestaurant: async (formData, token) => {
-    console.log("Token : " + token);
-
-    try {
-
-      const response = await axios.post('/api/v1/restaurant', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response.data.restaurant);
-      set((state) => ({ loggedInRestaurant: state.loggedInRestaurant = response.data.restaurant }))
-      return { success: true, msg: response.data.restaurant };
-    } catch (error) {
-      return { success: false, msg: "Something went wrong" }
-    }
-  },
+  
   getItem: async (restaurantId, itemId, token) => {
     try {
       const response = await axios.get(`/api/v1/restaurant/${restaurantId}/menu/${itemId}`, {

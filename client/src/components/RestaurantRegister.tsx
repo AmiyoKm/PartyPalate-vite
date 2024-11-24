@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Card, CardContent, CardDescription,  CardHeader, CardTitle } from "@/components/ui/card"
-import useRestaurantInfo from '@/store/Restaurant'
+
 import useUserData from '@/store/auth'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@/hooks/use-toast'
@@ -70,8 +70,8 @@ export function RestaurantRegister() {
   const navigate =useNavigate()
   const {toast} = useToast()
  // const {user} = useUserData()
-  const {createRestaurant } = useRestaurantInfo()
-  const {token} = useUserData()
+  
+  const {token , createRestaurant} = useUserData()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

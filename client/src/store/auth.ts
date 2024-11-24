@@ -96,7 +96,7 @@ interface UserData {
     restaurant : Restaurant
     confirmedEvent : ConfirmedEvent
     setUser: (users: User) => void;
-    register: (formData: User) => Promise<({ success: boolean; msg: any })>;
+    register: (formData: any) => Promise<({ success: boolean; msg: any })>;
     login : (email : string , password : string , role : string) => any
     logout : () => void
     createCustomer : (formData : any , token :string) =>  Promise<({ success: boolean; msg: any })>
@@ -111,6 +111,7 @@ interface UserData {
     updateEventForRestaurant : (restaurantId : string , event : any , token : string) => Promise<({ success: boolean; msg: any })>
     updateEventForCustomer : ( userId : string , event : any , token : string) => Promise<({ success: boolean; msg: any })>
     deleteEvent : (restaurantId : string , eventId : string , token : string) => Promise<({ success: boolean; msg: any })>
+    createRestaurant : (formData : any , token : string) => Promise<({ success: boolean; msg: any })>
 }
  const useUserData = create<UserData>((set)=>({
     user : {
@@ -164,6 +165,8 @@ interface UserData {
     },
     setUser : (user) => set({user}),
     register : async (formData)=> {
+        console.log(formData);
+        
         try {
             const res =   await axios.post('/api/v1/auth/register', formData)
             console.log(res.data);
@@ -453,7 +456,24 @@ interface UserData {
         }
 
 
-}
+},
+createRestaurant: async (formData, token) => {
+    console.log("Token : " + token);
+
+    try {
+
+      const response = await axios.post('/api/v1/restaurant', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data.restaurant);
+      set((state) => ({ restaurant: state.restaurant = response.data.restaurant }))
+      return { success: true, msg: response.data.restaurant };
+    } catch (error) {
+      return { success: false, msg: "Something went wrong" }
+    }
+  },
 
 
 

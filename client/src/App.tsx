@@ -28,7 +28,7 @@ import { EventConfirmation } from './components/EventConfirmation'
 function App() {
   const location = useLocation()
 
-  const hideNavbar = ['/','/login','/register']
+  const hideNavbar = ['/','/login','/register' , '/register/restaurant' , '/customer/register']
 
   const shouldHideNavbar = !hideNavbar.includes(location.pathname)
 

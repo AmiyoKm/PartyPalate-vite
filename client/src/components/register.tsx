@@ -20,7 +20,7 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
     role: "customer",
-    _id : ""
+    
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
 
