@@ -210,7 +210,7 @@ export function RestaurantRegister() {
                 <FormField
                   control={form.control}
                   name="priceRange"
-                  render={({ field }) => (
+                  render={({  }) => (
                     <FormItem>
                       <FormLabel>Price Range</FormLabel>
                       <Controller

@@ -11,10 +11,13 @@
   "scripts": {
  
    
-  "test": "echo \"Error: no test specified\" && exit 1",
+  "dev": " cross-env NODE_ENV=development nodemon server/server.js",
  
    
-  "start": "nodemon server/server.js"
+  "build": " npm install && npm install --prefix client && npm run build --prefix client",
+ 
+   
+  "start": "cross-env  NODE_ENV=production node server/server.js"
  
   },
  
@@ -78,6 +81,13 @@
  
    
   "xss-clean": "^0.1.4"
+ 
+  },
+ 
+  "devDependencies": {
+ 
+   
+  "cross-env": "^7.0.3"
  
   }
 }
