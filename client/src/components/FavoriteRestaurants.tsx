@@ -1,6 +1,6 @@
 import useUserData from '@/store/auth'
-import { Globe, Heart, MapPin, Phone, Search, Star } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import {  Heart, MapPin, Phone, Search, Star } from 'lucide-react'
+import  { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
