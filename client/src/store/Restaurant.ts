@@ -12,8 +12,8 @@ export interface Restaurant {
   menu: Array<{
     itemName: string;
     price: number;
-    description?: string;
-    image?: string;
+    description: string;
+    image: string;
     _id: string
     quantity : number
   }>;
@@ -21,19 +21,28 @@ export interface Restaurant {
     eventName: string;
     date: string;
     time: string;
-    description?: string;
+    description: string;
     _id: string;
+    planner : string
+    guests : number
+    status : string
+    plannedBy : string
 
   }>;
   orders: Array<{
-    customerName: string;
-    customerId: string;
     items: Array<{
       itemName: string;
-      itemPrice: number;
-      itemQuantity: number
-    }>;
-    status: string;
+      price: number;
+      description: string;
+      image: string;
+      _id: string
+      quantity : number
+  }>;
+  name : string
+  orderedBy : string
+  total: number;
+  status: string;
+  _id: string;
   }>;
   capacity: number;
   cuisine: string;

@@ -2,7 +2,7 @@ import BadRequestError from '../errors/bad-request.js'
 import NotFoundError from '../errors/not-found.js'
 import Customer from '../model/Customer.js'
 import User from '../model/user.js'
-
+import Restaurant from '../model/Restaurant.js'
 
 import { StatusCodes } from 'http-status-codes'
 const createCustomer = async (req, res) => {
@@ -79,4 +79,39 @@ const deleteCustomer = async(req,res)=>{
     }
     res.status(StatusCodes.OK).json({customer})
 }
-export {createCustomer , getAllCustomers , getCustomer , updateCustomer , deleteCustomer}
+
+const addFavorite = async(req,res)=>{
+  const {id : customerId , restaurantId} = req.params
+  const existingFavorite = await Customer.findOne({_id : customerId , favoriteRestaurants : restaurantId})
+
+  if(existingFavorite){
+    const customer = await Customer.findOneAndUpdate({_id : customerId , favoriteRestaurants : restaurantId} , { $pull  : { favoriteRestaurants : restaurantId} } , {new : true , runValidators : true})
+    if(!customer){
+      throw new NotFoundError(`No customer with id : ${customerId}`)
+    }
+    res.status(StatusCodes.OK).json({customer , message : "removed from Favorite"})
+  }else{
+    const customer = await Customer.findOneAndUpdate({_id : customerId} , { $push  : { favoriteRestaurants : restaurantId} } , {new : true , runValidators : true})
+    if(!customer){
+      throw new NotFoundError(`No customer with id : ${customerId}`)
+    }
+    res.status(StatusCodes.OK).json({customer , message : "added to Favorite"})
+  }
+ 
+
+
+
+}
+const getFavorite = async(req , res)=>{
+
+  const {id : customerId} = req.params
+  const customer = await Customer.findOne({_id : customerId})
+  if(!customer){
+    throw new NotFoundError(`No customer with id : ${customerId}`)
+  }
+   const favoriteRestaurants = customer.favoriteRestaurants.map((restaurantId) => ({ _id: restaurantId }));
+  console.log(favoriteRestaurants);
+  const restaurants = await Restaurant.find({_id : {$in : favoriteRestaurants}})
+  res.status(StatusCodes.OK).json({favoriteRestaurants : restaurants})
+}
+export {getFavorite,addFavorite,createCustomer , getAllCustomers , getCustomer , updateCustomer , deleteCustomer}

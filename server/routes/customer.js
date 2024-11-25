@@ -1,6 +1,6 @@
 import express from "express";
 import authenticationMiddleware from "../middleware/authentication.js";
-import { createCustomer, deleteCustomer, getAllCustomers, getCustomer, updateCustomer } from "../controller/customer.js";
+import { addFavorite, createCustomer, deleteCustomer, getAllCustomers, getCustomer, getFavorite, updateCustomer } from "../controller/customer.js";
 import {  createOrderCustomer, getAllOrders, getSingleOrder } from "../controller/customerOrder.js";
 import { createOrder, singleOrder } from "../controller/order.js";
 import { createEvent, getAllEvents } from "../controller/event.js";
@@ -12,7 +12,8 @@ customerRouter.use(authenticationMiddleware);
 
 customerRouter.route("/").get(getAllCustomers).post(createCustomer);
 customerRouter.route("/:id").get(getCustomer).patch(updateCustomer).delete(deleteCustomer);
-//customerRouter.route("/favorite").post(addFavorite).get(getFavorite);
+customerRouter.route("/:id/favorite/:restaurantId").post(addFavorite).get();
+customerRouter.route("/:id/favorite").get(getFavorite);
 //customerRouter.route("/:id/cart").post(addToCart).get(getCart);
  customerRouter.route("/:id/events").post().get(getAllEventsCustomer);
  customerRouter.route("/:id/events/:eventId").patch(updateEventForCustomer).get().delete();

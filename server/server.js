@@ -39,12 +39,12 @@ app.use(
 //app.use(cors(corsOptions));
 
 // Rate limiting
-app.use(
-  rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    max: 100, 
-  })
-);
+// app.use(
+//   rateLimit({
+//     windowMs: 15 * 60 * 1000, 
+//     max: 100, 
+//   })
+// );
 
 const port = process.env.PORT || 3000;
 const __dirname = path.resolve();

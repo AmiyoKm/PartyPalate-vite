@@ -15,7 +15,7 @@ interface Customer {
     bio : string
     phone : string
     address : string
-    _id ?: string
+    _id : string
     events : Array<{
         eventName: string;
         date: string;
@@ -28,7 +28,7 @@ interface Customer {
         status : string
     }>
     orders : []
-    favoriteRestaurants : []
+    favoriteRestaurants : Array<string>
 }
 interface Restaurant {
     _id: string;
@@ -36,12 +36,14 @@ interface Restaurant {
     image: string;
     address: string;
     phone: string;
+    rating : number
     description : string
     priceRange : string
     cuisine : string
     capacity : number
     openingTime : string
     closingTime : string
+    isRestaurantRegistered : boolean
     menu: Array<{
         itemName: string;
         price: number;
@@ -54,7 +56,7 @@ interface Restaurant {
         eventName: string;
         date: string;
         time: string;
-        description?: string;
+        description: string;
         _id: string;
         planner : string
         guests : number
@@ -65,8 +67,8 @@ interface Restaurant {
         items: Array<{
             itemName: string;
             price: number;
-            description?: string;
-            image?: string;
+            description: string;
+            image: string;
             _id: string
             quantity : number
         }>;
@@ -89,16 +91,19 @@ interface ConfirmedEvent{
     expiryDate : string
     cvv : string
 } 
+
 interface UserData {
     user: User;
     token : string;
     customer : Customer
     restaurant : Restaurant
     confirmedEvent : ConfirmedEvent
+    favoriteRestaurants : Restaurant[]
     setUser: (users: User) => void;
     register: (formData: any) => Promise<({ success: boolean; msg: any })>;
     login : (email : string , password : string , role : string) => any
     logout : () => void
+     
     createCustomer : (formData : any , token :string) =>  Promise<({ success: boolean; msg: any })>
     updateCustomer : (formData : any ,user: any, token : string) => Promise<({ success: boolean; msg: any })> 
     addItem : (restaurantId : string , item : any , token : string) => Promise<({ success: boolean; msg: any })>
@@ -112,6 +117,9 @@ interface UserData {
     updateEventForCustomer : ( userId : string , event : any , token : string) => Promise<({ success: boolean; msg: any })>
     deleteEvent : (restaurantId : string , eventId : string , token : string) => Promise<({ success: boolean; msg: any })>
     createRestaurant : (formData : any , token : string) => Promise<({ success: boolean; msg: any })>
+    addFavorite : ( customerId : string , restaurant : Restaurant , token : string) => Promise<({ success: boolean; msg: any })>
+    getFavorite : ( customerId : string , token : string) => Promise<({ success: boolean; msg: any })>
+    handleRemoveFromFavorite : (id : string) => void
 }
  const useUserData = create<UserData>((set)=>({
     user : {
@@ -150,8 +158,10 @@ interface UserData {
       menu: [],
       events: [],
       orders: [],
-      orderedBy : '',  
+      rating : 0, 
+      isRestaurantRegistered : false 
     },
+    favoriteRestaurants : [],
     confirmedEvent : {
         eventName : '',
         date : '',
@@ -254,6 +264,8 @@ interface UserData {
                 restaurantName: '',
                 address: '',
                 image : '',
+                rating : 0,
+                isRestaurantRegistered : false,
                 phone: '',
                 description : '',
                 priceRange : '',
@@ -474,6 +486,44 @@ createRestaurant: async (formData, token) => {
       return { success: false, msg: "Something went wrong" }
     }
   },
+  addFavorite: async (customerId,restaurant, token) => {
+    try {
+      const response = await axios.post(
+        `/api/v1/customer/${customerId}/favorite/${restaurant._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      set((state) => ({ customer: state.customer = response.data.customer }));
+      return { success: true, msg: response.data.message };
+    } catch (error) {
+        console.log(error);
+        
+      return { success: false, msg: "Something went wrong" };
+    }
+  },
+  getFavorite: async (customerId, token) => {
+    try {
+      const response = await axios.get(
+        `/api/v1/customer/${customerId}/favorite`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      set((state) => ({ favoriteRestaurants: state.favoriteRestaurants = response.data.favoriteRestaurants }));
+      return { success: true, msg: response.data.message };
+    } catch (error) {
+      return { success: false, msg: "Something went wrong" };
+    }
+  },
+  handleRemoveFromFavorite : (id: string)=> {
+    set((state) => ({ favoriteRestaurants: state.favoriteRestaurants.filter((restaurant) => restaurant._id !== id) }));
+  }
 
 
 

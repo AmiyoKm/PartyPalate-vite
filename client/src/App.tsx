@@ -24,6 +24,7 @@ import { CustomerOrders } from './components/CustomerOrders'
 import { RestaurantMenu } from './components/RestaurantMenu'
 import ConfirmEvent from './components/ConfirmEvent'
 import { EventConfirmation } from './components/EventConfirmation'
+import FavoriteRestaurants from './components/FavoriteRestaurants'
 
 function App() {
   const location = useLocation()
@@ -45,6 +46,7 @@ function App() {
       <Route path='/register/restaurant' element={<RestaurantRegister/>} />
       <Route path="/home/customer/:id" element={<HomePageComponent />} />
       <Route path="/cart/customer/:id" element={<Cart />} />
+      <Route path="/customer/:id/favorite" element={< FavoriteRestaurants/>} />
       <Route path="/event-planning/customer/:id" element={<EventPlanning />} />
       <Route path="/event-management/customer/:id" element={<EventManagement />} />
       <Route path="/profile/customer/:id" element={<CustomerProfile />} />
@@ -59,7 +61,7 @@ function App() {
       <Route path='/customer/:id/item/:restaurantId/:itemId' element={<FoodItemDetails/>} />
       <Route path='/customer/:id/orders' element={<CustomerOrders/>} />
       <Route path='/restaurant/:id/menu' element={<RestaurantMenu/>} />
-      EventConfirmation
+      
     </Routes>
     </ThemeProvider>
     </>
