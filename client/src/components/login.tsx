@@ -42,8 +42,10 @@ export function Login() {
             title: `Welcome back ${res.msg.user.username}`,
             description : "Login Successful",
           })
+          console.log(res.data);
+          
           navigate(`/home/customer/${res.msg.user._id}`)
-        }else{
+        }else if(!res.success){
           toast({
             title: `wrong Credentials`,
             description : "Login Unsuccessful",
@@ -71,6 +73,10 @@ export function Login() {
      
     } catch (error) {
       console.log(error);
+      toast({
+        title: `Wrong Credentials`,
+        description : "Please Check you email , password and role",
+      })
       
     }
     

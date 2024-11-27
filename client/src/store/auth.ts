@@ -120,6 +120,7 @@ interface UserData {
     addFavorite : ( customerId : string , restaurant : Restaurant , token : string) => Promise<({ success: boolean; msg: any })>
     getFavorite : ( customerId : string , token : string) => Promise<({ success: boolean; msg: any })>
     handleRemoveFromFavorite : (id : string) => void
+    setToken : (token : string) => void
 }
  const useUserData = create<UserData>((set)=>({
     user : {
@@ -174,6 +175,7 @@ interface UserData {
         cvv : ''
     },
     setUser : (user) => set({user}),
+    setToken: (token) => set(state => ({ token : state.token = token})),
     register : async (formData)=> {
         console.log(formData);
         
@@ -196,7 +198,8 @@ interface UserData {
                 const res =   await axios.post('/api/v1/auth/login', {email , password , role})
                 //console.log(res.data);
                 set(state =>({ user : state.user =res.data.user}))
-                set(state =>({ token : state.token =res.data.token}))
+                set(state =>({ token : state.token = res.data.token }))
+                localStorage.setItem('token', res.data.token);
                 
                 const customer = await axios.get(`/api/v1/customer/${res.data.user._id}` ,{
                     headers : {
@@ -214,7 +217,8 @@ interface UserData {
                 const res =   await axios.post('/api/v1/auth/login', {email , password , role})
                 //console.log(res.data);
                 set(state =>({ user : state.user =res.data.user}))
-                set(state =>({ token : state.token =res.data.token}))
+                set(state =>({ token : state.token = res.data.token }))
+                localStorage.setItem('token', res.data.token);
                 
                 const restaurant = await axios.get(`/api/v1/restaurant/${res.data.user._id}` ,{
                     headers : {

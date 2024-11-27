@@ -15,10 +15,10 @@ import { ToastAction } from "./ui/toast"
 export function HomePageComponent() {
   const {restaurants , getAllRestaurants , getItem , setSelectedRestaurant} = useRestaurantInfo()
   const [search , setSearch] = useState('')
-  const [selectedRestaurants, setSelectedRestaurants] = useState<Restaurant[] >(restaurants);
+
   const navigate = useNavigate();
   const {addToCart} =useCart()
- const {user ,token , customer ,addFavorite} =useUserData()
+ const {user ,token , customer ,addFavorite ,setToken} =useUserData()
  const {toast } = useToast()
  const handleFoodItemClick = async(userId : string | undefined ,restaurant : any ,itemId : string) =>{
   console.log(userId ,restaurant._id ,itemId);
@@ -40,12 +40,12 @@ export function HomePageComponent() {
   navigate(`/customer/${user?._id}/restaurant/${restaurant._id}`)
  }
 
+ const filteredRestaurants = restaurants.filter((restaurant)=> restaurant.restaurantName.toLowerCase().includes(search.toLowerCase()));
 
-
-const handleSearch =(search : string)=>{
-  const filteredRestaurants = selectedRestaurants.filter((restaurant)=> restaurant.restaurantName.toLowerCase().includes(search.toLowerCase()));
-  setSelectedRestaurants(filteredRestaurants);
-}
+// const handleSearch =(search : string)=>{
+//   const filteredRestaurants = selectedRestaurants.filter((restaurant)=> restaurant.restaurantName.toLowerCase().includes(search.toLowerCase()));
+//   setSelectedRestaurants(filteredRestaurants);
+// }
 const handleAddToFavorite = async(restaurant : Restaurant)=>{
 
  const res = await addFavorite(customer._id ,restaurant ,token)
@@ -67,11 +67,15 @@ const handleAddToFavoriteText = (restaurant : Restaurant)=>{
 useEffect(() => {
   const fetchRestaurants = async () => {
     const data  = await getAllRestaurants(token);
-    setSelectedRestaurants(data as unknown as Restaurant[]);
+   
     console.log('Fetched Restaurants:', data);
   };
+  const token = localStorage.getItem('token')
+        if (token) {
+            setToken(token)
+        }
   fetchRestaurants();
-}, [search]);
+}, [getAllRestaurants ,token , setToken]);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -81,12 +85,12 @@ useEffect(() => {
           <span className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Featured Restaurants</span>
           <div className=" flex items-center justify-center sm:items-stretch sm:justify-start">
             <Input value={search} onChange={(e) => setSearch(e.target.value)}  className='w-52 mr-2 border-purple-500' placeholder="Search by restaurants..." />
-            <Button onClick={()=>handleSearch(search)}>Search</Button> 
+            {/* <Button onClick={()=>handleSearch(search)}>Search</Button>  */}
           </div>
           </div>
           
           <div className="space-y-12">
-            {selectedRestaurants.map((restaurant) => (
+            {filteredRestaurants.map((restaurant) => (
               <div key={restaurant._id} className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
                 <div className="px-4 py-5 sm:px-6 flex items-center justify-between">
                   <div onClick={()=>handleSelectedRestaurant(restaurant)} className="flex rounded-lg items-center hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-4">
