@@ -5,10 +5,13 @@ import { Input } from './ui/input'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
-import { Restaurant } from '@/store/Restaurant'
+import useRestaurantInfo, { Restaurant } from '@/store/Restaurant'
+import {  useNavigate } from 'react-router-dom'
 
 const FavoriteRestaurants = () => {
-    const {customer , getFavorite , token , favoriteRestaurants , addFavorite ,handleRemoveFromFavorite} = useUserData()
+    const {customer , getFavorite , token , favoriteRestaurants , addFavorite ,handleRemoveFromFavorite , user } = useUserData()
+   const navigate = useNavigate()
+  const {setSelectedRestaurant} = useRestaurantInfo()
     //const [favorites , setFavorites] = useState<Restaurant[]>([])
     const [search , setSearch] = useState('')
 
@@ -20,6 +23,11 @@ const FavoriteRestaurants = () => {
         addFavorite(customer._id,restaurant , token) 
         
         handleRemoveFromFavorite(restaurant._id)
+    }
+    const handleGoToRestaurantMenu = (restaurant: Restaurant) => {
+      setSelectedRestaurant(restaurant)
+
+        navigate(`/customer/${user._id}/restaurant/${restaurant._id}`)
     }
     useEffect( ()=> {
         const fetchFav = async() => {
@@ -83,7 +91,13 @@ const FavoriteRestaurants = () => {
                     
                   </div>
                 </CardContent>
+                
                 <CardFooter>
+                  <div className='flex flex-col w-full space-y-3'>
+                    {/* <Link to ={`/restaurant/${user._id}/menu`}> */}
+                    <Button onClick={()=> handleGoToRestaurantMenu(restaurant)} className="w-full" variant='outline'>View Details</Button>
+                    {/* </Link> */}
+                
                   <Button
                     variant="destructive"
                     className="w-full"
@@ -91,6 +105,8 @@ const FavoriteRestaurants = () => {
                   >
                     <Heart className="w-4 h-4 mr-2" /> Remove from Favorites
                   </Button>
+                  </div>
+               
                 </CardFooter>
               </Card>
             ))}
