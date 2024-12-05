@@ -17,6 +17,13 @@ export function RestaurantMenuForCustomer() {
  const {selectedRestaurant} = useRestaurantInfo()
 const {addToCart} = useCart()
 const handleAddToCart = (item : Item) => {
+  if(selectedRestaurant.isRestaurantOpenForOrder ==="OFF"){
+    return toast({
+      variant: "destructive",
+      title : `${selectedRestaurant.restaurantName} is closed`,
+      description : 'You can not add items to the cart'
+    })
+  }
   addToCart(item)
   toast({
     title : `${item.itemName} is added to the Cart`,
@@ -28,9 +35,10 @@ const handleAddToCart = (item : Item) => {
      
       <main className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-2xl">{selectedRestaurant.restaurantName}</CardTitle>
+          <CardHeader >
+            <CardTitle className="text-2xl flex items-center">{selectedRestaurant.restaurantName} <Badge variant={`${selectedRestaurant.isRestaurantOpenForOrder==="OFF" ? 'destructive' : 'secondary' }`} className={`ml-4 ${selectedRestaurant.isRestaurantOpenForOrder ==="ON" ? 'bg-green-500 text-white': ''}`}>{selectedRestaurant.isRestaurantOpenForOrder==="ON" ? 'ON' : "OFF"} </Badge></CardTitle>
             <CardDescription>{selectedRestaurant.cuisine}</CardDescription>
+            
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-4">

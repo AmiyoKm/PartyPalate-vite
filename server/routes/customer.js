@@ -2,7 +2,7 @@ import express from "express";
 import authenticationMiddleware from "../middleware/authentication.js";
 import { addFavorite, createCustomer, deleteCustomer, getAllCustomers, getCustomer, getFavorite, updateCustomer } from "../controller/customer.js";
 import {  createOrderCustomer, getAllOrders, getSingleOrder } from "../controller/customerOrder.js";
-import { createOrder, singleOrder } from "../controller/order.js";
+import { createOrder, singleOrder, updateOrderCustomer } from "../controller/order.js";
 import { createEvent, getAllEvents } from "../controller/event.js";
 import { getAllEventsCustomer, updateEventForCustomer } from "../controller/customerEvent.js";
 //import customerMiddleware from "../middleware/customerMiddleware.js";
@@ -19,7 +19,7 @@ customerRouter.route("/:id/favorite").get(getFavorite);
  customerRouter.route("/:id/events/:eventId").patch(updateEventForCustomer).get().delete();
  customerRouter.route("/:restaurantId/orders").post(createOrder)
 customerRouter.route("/:id/orders").get(getAllOrders)
- customerRouter.route("/:id/orders/:orderId").patch().get(getSingleOrder).delete();
+ customerRouter.route("/:id/orders/:orderId").patch(updateOrderCustomer).get(getSingleOrder).delete();
 
 
 export default customerRouter;

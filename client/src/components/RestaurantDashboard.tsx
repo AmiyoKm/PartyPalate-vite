@@ -1,5 +1,5 @@
 
-import { Calendar, Clock, Users,  Trash2 } from 'lucide-react'
+import { Calendar, Clock, Users,  Trash2, Star } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -156,6 +156,16 @@ export function RestaurantDashboard() {
                         </div>
                         <div className="text-sm font-medium mt-1">
                           Total: ${order.total.toFixed(2)}
+                        </div>
+                        <div className="text-lg font-medium mt-1 text-primary">
+                          Review : {order.review}
+                        </div>
+                        <div className='flex ' >
+                          {
+                            [...Array(5)].map((_,index) => (
+                              <Star key={index} className={`text-sm text-yellow-500 ${order.stars >index ? 'fill-yellow-500' : ''}`} />
+                            ))
+                          }
                         </div>
                       </div>
                       <div className="flex flex-col items-end space-y-2">

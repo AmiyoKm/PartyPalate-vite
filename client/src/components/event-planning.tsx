@@ -7,6 +7,7 @@ import {  Users, DollarSign, Star, MapPin } from 'lucide-react'
 import useRestaurantInfo from '@/store/Restaurant'
 import useUserData from '@/store/auth'
 import { useNavigate } from 'react-router-dom'
+import { Badge } from './ui/badge'
 
 
 
@@ -47,7 +48,11 @@ export function EventPlanning() {
                       <img src={restaurant.image} alt={restaurant.restaurantName} className="w-full h-40 object-cover rounded-t-lg" />
                     </CardHeader>
                     <CardContent className="pt-4">
-                      <CardTitle>{restaurant.restaurantName}</CardTitle>
+                      <div className='flex justify-between items-center'>
+                        <CardTitle>{restaurant.restaurantName}</CardTitle>
+                        <Badge variant={`${restaurant.isRestaurantOpenForEvent==="OFF" ? 'destructive' : 'secondary' }`} className={`${restaurant.isRestaurantOpenForEvent ==="ON" ? 'bg-green-500 text-white': ''}`}>{restaurant.isRestaurantOpenForEvent==="ON" ? 'ON' : "OFF"} </Badge>
+                      </div>
+                     
                       <CardDescription>
                         <div className="flex flex-col mt-2 space-y-2">
                           <div className='flex items-center'>

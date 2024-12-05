@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom"
 import useCart, { type Item } from "@/store/Cart"
 import { useToast } from "@/hooks/use-toast"
 import { ToastAction } from "./ui/toast"
+import { Badge } from "./ui/badge"
 
 
 export function HomePageComponent() {
@@ -28,6 +29,13 @@ export function HomePageComponent() {
 
  }
  const handleAdd = (restaurant : Restaurant ,item : Item)=>{
+  if(restaurant.isRestaurantOpenForOrder ==="OFF"){
+    return toast({
+      variant: "destructive",
+      title : `${restaurant.restaurantName} is closed`,
+      description : 'You can not add items to the cart'
+    })
+  }
   addToCart(item )
   toast({
     title : `${item.itemName} is added to the Cart`,
@@ -91,14 +99,14 @@ useEffect(() => {
           
           <div className="space-y-12">
             {filteredRestaurants.map((restaurant) => (
-              <div key={restaurant._id} className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+              <div  key={restaurant._id} className={`bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg`}>
                 <div className="px-4 py-5 sm:px-6 flex items-center justify-between">
-                  <div onClick={()=>handleSelectedRestaurant(restaurant)} className="flex rounded-lg items-center hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-4">
+                  <div onClick={()=>handleSelectedRestaurant(restaurant)} className="flex rounded-lg items-center hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-4 space-x-3">
                     <img src={restaurant.image} alt={`${restaurant.restaurantName} logo`} className="h-12 w-12 rounded-full mr-4" />
                     <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                       {restaurant.restaurantName}
                     </h3>
-                   
+                    <Badge variant={`${restaurant.isRestaurantOpenForOrder==="OFF" ? 'destructive' : 'secondary' }`} className={`${restaurant.isRestaurantOpenForOrder ==="ON" ? 'bg-green-500 text-white': ''}`}>{restaurant.isRestaurantOpenForOrder==="ON" ? 'ON' : "OFF"} </Badge>
                   </div>
                  
                   <span className="flex items-center text-sm">

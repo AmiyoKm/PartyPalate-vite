@@ -6,9 +6,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import useUserData from '@/store/auth'
 import useRestaurantInfo from '@/store/Restaurant'
-import { Link } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
+
 
 export function RestaurantDetails() {
+  const navigate =useNavigate()
+  const {toast} =useToast()
   const {user } = useUserData()
   const {selectedRestaurantForPlanning} = useRestaurantInfo()
   const priceRangeValue =(value : string) => {
@@ -23,7 +27,16 @@ export function RestaurantDetails() {
         return 50000
     }
   }
-    
+const handleEvent =()=>{
+  if(selectedRestaurantForPlanning.isRestaurantOpenForEvent ==="OFF"){
+   return toast({
+      variant: "destructive",
+      title : `${selectedRestaurantForPlanning.restaurantName} is closed for event planning`,
+      description : 'You can not plan event at this restaurant'
+    })
+  }
+navigate(`/event-planning/customer/${user._id}/${selectedRestaurantForPlanning._id}/confirm-event`)
+}
   
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -41,8 +54,8 @@ export function RestaurantDetails() {
                 <CardTitle className="text-3xl">{selectedRestaurantForPlanning.restaurantName}</CardTitle>
                 <CardDescription className="text-lg">{selectedRestaurantForPlanning.cuisine}</CardDescription>
               </div>
-              <Badge variant="secondary" className="text-lg">
-                {selectedRestaurantForPlanning.priceRange}
+              <Badge variant={`${selectedRestaurantForPlanning.isRestaurantOpenForEvent==="ON" ? 'secondary' : "destructive"}`} className={`text-lg text-white ${selectedRestaurantForPlanning.isRestaurantOpenForEvent==="ON" ? 'bg-green-500' : ""}`}>
+                {selectedRestaurantForPlanning.isRestaurantOpenForEvent==="ON" ? 'ON' : "OFF"}
               </Badge>
             </div>
           </CardHeader>
@@ -93,7 +106,7 @@ export function RestaurantDetails() {
           </CardContent>
           <CardFooter>
            
-              <Button className="w-full">  <Link to={`/event-planning/customer/${user._id}/${selectedRestaurantForPlanning._id}/confirm-event`}>Plan Event at This Restaurant</Link></Button>
+              <Button className="w-full" onClick={handleEvent}>Plan Event at This Restaurant</Button>
            
            
           </CardFooter>

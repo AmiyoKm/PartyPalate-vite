@@ -14,10 +14,13 @@ export interface Item {
 }
 type OrderStatus = "preparing" | "ready" | "delivered"
 
-interface Order  {
+export interface Order  {
     _id: string;
     items: Item[];
     total: number;
+    stars : number;
+    restaurant: string;
+    review : string;
     status:  OrderStatus,
 }
 
@@ -54,7 +57,10 @@ const useCart = create<useCart>((set) => ({
         ],
         total: 0,
         restaurant: "",
-        status: "preparing"
+        status: "preparing",
+        stars : 0,
+        
+        review : ""
     },
     orders : [],
     addToCart: (item: Item) => {
@@ -133,7 +139,7 @@ const useCart = create<useCart>((set) => ({
                     Authorization: `Bearer ${token}`
                 }
             })
-            console.log(res.data);
+           
             set((state)=> ({orders : state.orders = res.data.orders}))
         } catch (error) {
             console.log(error);

@@ -16,17 +16,25 @@ import { useToast } from '@/hooks/use-toast'
 export function FoodItemDetails() {
   const {user} = useUserData()
   const {toast} = useToast()
- const  {  item , restaurantName} =  useRestaurantInfo()
+ const  {  item , restaurantName , selectedRestaurant} =  useRestaurantInfo()
   const { addToCart} = useCart()
 
   const handleAddToCart =(item : Item)=> {
+    if(selectedRestaurant.isRestaurantOpenForOrder ==="OFF"){
+      return toast({
+        variant: "destructive",
+        title : `${selectedRestaurant.restaurantName} is closed`,
+        description : 'You can not add items to the cart'
+    })
+
+  }
     addToCart(item)
     toast({
       title : `${item.itemName} is added to the Cart`
      
     })
+  
   }
-
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       

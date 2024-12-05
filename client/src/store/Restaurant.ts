@@ -8,6 +8,8 @@ export interface Restaurant {
   _id: string;
   restaurantName: string;
   address: string;
+  isRestaurantOpenForOrder : string,
+   isRestaurantOpenForEvent : string
   phone: string;
   menu: Array<{
     itemName: string;
@@ -44,6 +46,8 @@ export interface Restaurant {
   total: number;
   status: string;
   _id: string;
+  review : string
+  stars : number
   }>;
   capacity: number;
   cuisine: string;
@@ -90,6 +94,8 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
     restaurantName: '',
     address: '',
     phone: '',
+    isRestaurantOpenForOrder : '',
+    isRestaurantOpenForEvent : '',
     menu: [],
     events: [],
     orders: [],
@@ -118,6 +124,8 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
     description: '',
     image: '',
     openingTime: '',
+    isRestaurantOpenForOrder : '',
+    isRestaurantOpenForEvent : '',
     closingTime: '',
     rating: 0,
     isRestaurantRegistered: false,
@@ -134,6 +142,8 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
     capacity: 0,
     cuisine: '',
     priceRange: '',
+    isRestaurantOpenForOrder : '',
+    isRestaurantOpenForEvent : '',
     description: '',
     image: '',
     openingTime: '',

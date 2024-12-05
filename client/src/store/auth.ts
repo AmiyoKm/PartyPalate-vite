@@ -33,6 +33,8 @@ interface Customer {
 interface Restaurant {
     _id: string;
     restaurantName: string;
+    isRestaurantOpenForOrder: string, 
+    isRestaurantOpenForEvent : string, 
     image: string;
     address: string;
     phone: string;
@@ -79,6 +81,8 @@ interface Restaurant {
         total: number;
         status: string;
         _id: string;
+        review : string
+        stars : number
     }>;
 }
 interface ConfirmedEvent{
@@ -123,6 +127,7 @@ interface UserData {
     getFavorite : ( customerId : string , token : string) => Promise<({ success: boolean; msg: any })>
     handleRemoveFromFavorite : (id : string) => void
     setToken : (token : string) => void
+    updateOrderCustomer : (customerId : string , orderId : string , order : any , token : string) => Promise<({ success: boolean; msg: any })>
 }
  const useUserData = create<UserData>((set)=>({
     user : {
@@ -149,6 +154,8 @@ interface UserData {
     restaurant : {
       _id: '',
       restaurantName: '',
+      isRestaurantOpenForOrder:"ON" ,
+      isRestaurantOpenForEvent : "ON" ,
       address: '',
       image : '',
       phone: '',
@@ -282,6 +289,8 @@ interface UserData {
                 capacity : 0,
                 openingTime : '',
               closingTime : '',
+              isRestaurantOpenForOrder: "ON" , 
+              isRestaurantOpenForEvent : "ON",
                 menu: [],
                 events: [],
                 orders: [],
@@ -382,11 +391,28 @@ interface UserData {
             }
         })
         set((state)=> ({ restaurant : state.restaurant = res.data.restaurant}))
+        
         return  { success : true , msg : res.data}
     } catch (error) {
         return  { success : false , msg : 'Something went wrong'}
     }
        
+
+},    updateOrderCustomer : async (customerId , orderId , order , token) => {
+    
+    try {
+       const res = await axios.patch(`/api/v1/customer/${customerId}/orders/${orderId}`, {order : order}, {
+           headers: {
+             Authorization: `Bearer ${token}`,
+           }
+       })
+       set((state)=> ({ customer : state.customer = res.data.customer}))
+       
+       return  { success : true , msg : res.data}
+   } catch (error) {
+       return  { success : false , msg : 'Something went wrong'}
+   }
+      
 
 },
     deleteOrder : async (restaurantId , orderId , token) => {

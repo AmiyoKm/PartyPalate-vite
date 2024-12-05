@@ -45,6 +45,8 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   name : { type: String, required: true },
+  review : {type : String, default : "No Review Yet"},
+  stars : {type : Number, default : 0},
   items: [
     {
       itemName: { type: String, required: true },
@@ -95,6 +97,8 @@ const restaurantSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  isRestaurantOpenForOrder: { type: String ,enum : ["ON" , "OFF"], default: "ON" },
+  isRestaurantOpenForEvent : { type: String ,enum : ["ON" , "OFF"], default: "ON" },
 });
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);

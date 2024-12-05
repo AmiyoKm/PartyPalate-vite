@@ -90,6 +90,7 @@ export function RestaurantProfile() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Restaurant Name</Label>
+                    <div className="flex items-center space-x-3">
                     <Building2 className="w-4 h-4 text-gray-500" />
                     <Input
                       id="name"
@@ -98,10 +99,13 @@ export function RestaurantProfile() {
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
+                    </div>
+                  
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone</Label>
+                    <Label htmlFor="phone">Phone</Label> 
+                    <div className="flex items-center space-x-3">
                     <Phone className="w-4 h-4 text-gray-500" />
                     <Input
                       id="phone"
@@ -110,9 +114,11 @@ export function RestaurantProfile() {
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="address">Address</Label>
+                    <div className="flex items-center space-x-3">
                     <MapPin className="w-4 h-4 text-gray-500" />
                     <Input
                       id="address"
@@ -121,9 +127,11 @@ export function RestaurantProfile() {
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="cuisine">Cuisine</Label>
+                    <div className="flex items-center space-x-3">
                     <Utensils className="w-4 h-4 text-gray-500" />
                     <Input
                       id="cuisine"
@@ -132,9 +140,11 @@ export function RestaurantProfile() {
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="priceRange">Price Range</Label>
+                    <div className="flex items-center space-x-3">
                     <DollarSign className="w-4 h-4 text-gray-500" />
                     <Select
                       name="priceRange"
@@ -163,9 +173,11 @@ export function RestaurantProfile() {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="capacity">Capacity</Label>
+                    <div className="flex items-center space-x-3">
                     <Users className="w-4 h-4 text-gray-500" />
                     <Input
                       id="capacity"
@@ -175,9 +187,11 @@ export function RestaurantProfile() {
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="openingHours">Opening Hours</Label>
+                    <div className="flex items-center space-x-3">
                     <Clock className="w-4 h-4 text-gray-500" />
                     <Input
                       id="openingHours"
@@ -186,9 +200,11 @@ export function RestaurantProfile() {
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="openingHours">Closing Hours</Label>
+                    <div className="flex items-center space-x-3">
                     <Clock className="w-4 h-4 text-gray-500" />
                     <Input
                       id="openingHours"
@@ -197,10 +213,46 @@ export function RestaurantProfile() {
                       onChange={handleInputChange}
                       disabled={!isEditing}
                     />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Turn ON/OFF Taking Orders</Label>
+                    <div className="flex items-center space-x-3">
+                    <Select disabled={!isEditing} name="isRestaurantOpenForOrder"
+                      value={restaurantData.isRestaurantOpenForOrder} onValueChange={(value)=> setRestaurantData((prev)=>  ({...prev , isRestaurantOpenForOrder : value}))}>
+                      <SelectTrigger  className={`${restaurantData.isRestaurantOpenForOrder === "ON" ? "bg-green-400 text-white" : "bg-red-500 text-white"}`}>
+                        <SelectValue placeholder={restaurantData.isRestaurantOpenForOrder} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="ON">ON</SelectItem>
+                          <SelectItem value="OFF">OFF</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Turn ON/OFF Events</Label>
+                    <div className="flex items-center space-x-3">
+                    <Select   disabled={!isEditing} name="isRestaurantOpenForEvent"
+                      value={restaurantData.isRestaurantOpenForEvent} onValueChange={(value)=> setRestaurantData((prev)=>  ({...prev , isRestaurantOpenForEvent : value}))}>
+                      <SelectTrigger className={`${restaurantData.isRestaurantOpenForEvent === "ON" ? "bg-green-400 text-white" : "bg-red-500 text-white"}`}>
+                        <SelectValue placeholder={restaurantData.isRestaurantOpenForEvent} />
+                      </SelectTrigger>
+                      <SelectContent >
+                        <SelectGroup >
+                          <SelectItem value="ON">ON</SelectItem>
+                          <SelectItem value="OFF">OFF</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    </div>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
+                  <div className="flex items-center space-x-3">
                   <Textarea
                     id="description"
                     name="description"
@@ -209,6 +261,19 @@ export function RestaurantProfile() {
                     disabled={!isEditing}
                     rows={3}
                   />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="image">Image URL</Label>
+                  <div className="flex items-center space-x-3">
+                  <Input
+                    id="image"
+                    name="image"
+                    value={restaurantData.image}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                  />
+                  </div>
                 </div>
               </form>
             </CardContent>

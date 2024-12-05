@@ -43,6 +43,8 @@ const orderSchema = new mongoose.Schema({
    // enum: ["preparing", "ready", "delivered"],
     default: "preparing",
   },
+  stars : {type : Number, default : 0},
+  review : {type : String, default : "No Review Yet"}
 });
 
 
