@@ -43,7 +43,8 @@ interface Restaurant {
     capacity : number
     openingTime : string
     closingTime : string
-    isRestaurantRegistered : boolean
+    isRestaurantRegistered : boolean,
+    costPerPerson : number
     menu: Array<{
         itemName: string;
         price: number;
@@ -62,6 +63,7 @@ interface Restaurant {
         guests : number
         status : string
         plannedBy : string
+        
     }>;
     orders: Array<{
         items: Array<{
@@ -160,7 +162,8 @@ interface UserData {
       events: [],
       orders: [],
       rating : 0, 
-      isRestaurantRegistered : false 
+      isRestaurantRegistered : false ,
+      costPerPerson : 0
     },
     favoriteRestaurants : [],
     confirmedEvent : {
@@ -264,6 +267,8 @@ interface UserData {
         }))
         set((state)=> ({
             restaurant : state.restaurant = {
+                
+                costPerPerson : 0,
                 _id: '',
                 restaurantName: '',
                 address: '',

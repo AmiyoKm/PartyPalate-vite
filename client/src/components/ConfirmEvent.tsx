@@ -27,6 +27,7 @@ import useRestaurantInfo from "@/store/Restaurant";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
+
 const formSchema = z.object({
   eventName: z.string().min(2, {
     message: "Event name must be at least 2 characters.",
@@ -62,6 +63,26 @@ const ConfirmEvent = () => {
   const navigate = useNavigate();
   const { user , token , createEvent } = useUserData();
   const {selectedRestaurantForPlanning}=useRestaurantInfo()
+
+  const getTotal =()=>{
+    let guests = form.watch("guests")
+    let pr = selectedRestaurantForPlanning.priceRange
+    let value = 0
+    if(pr ==='Inexpensive'){
+      value = 10000
+    }
+    if(pr ==='Moderate'){
+      value = 20000
+    }
+    if(pr ==='Expensive'){
+      value = 30000
+    }
+    if(pr ==='Very Expensive'){
+      value = 50000
+    }
+  
+   return value + selectedRestaurantForPlanning.costPerPerson*guests
+  }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -249,11 +270,10 @@ const ConfirmEvent = () => {
                                     <FormMessage />
                                 </FormItem>
                             )}
-
                             />
                         </div>
                     </div>
-                    <Button type="submit" className="w-full">Confirm Event</Button>
+                    <Button type="submit" className="w-full">Pay {getTotal().toLocaleString()} $</Button>
               </form>
             </Form>
           </CardContent>

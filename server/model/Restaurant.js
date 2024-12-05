@@ -31,6 +31,10 @@ const eventSchema = new mongoose.Schema({
     ref: "Customer",
     required: true,
   },
+  costPerPerson: { 
+    type: Number, required: true , default : 400
+  },
+
 });
 
 const orderSchema = new mongoose.Schema({
@@ -85,6 +89,7 @@ const restaurantSchema = new mongoose.Schema({
   openingTime: { type: String, required: true },
   closingTime: { type: String, required: true },
   rating: { type: Number, default: 0 },
+  costPerPerson : {type : Number , default : 400},
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

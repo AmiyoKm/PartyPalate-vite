@@ -14,7 +14,7 @@ const createRestaurant = async (req , res) => {
     
     try {
 
-        if(!req.body.restaurantName || !req.body.address || !req.body.phone  ||  !req.body.capacity || !req.body.cuisine || !req.body.priceRange || !req.body.description || !req.body.image || !req.body.rating || !req.body.user){
+        if(!req.body.restaurantName || !req.body.address || !req.body.phone  ||  !req.body.capacity || !req.body.cuisine || !req.body.priceRange || !req.body.description || !req.body.image || !req.body.rating || !req.body.user || !req.body.openingTime || !req.body.closingTime || !req.body.costPerPerson){
             throw new BadRequestError('Please provide all values')
           
         }

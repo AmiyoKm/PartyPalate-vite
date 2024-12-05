@@ -1,5 +1,5 @@
 
-import { CalendarIcon, Clock, Users, MapPin, User, PartyPopper } from 'lucide-react'
+import { CalendarIcon, Clock, Users, MapPin, User, PartyPopper, DollarSign } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -9,9 +9,30 @@ import { Link } from 'react-router-dom'
 
 
 
+
 export function EventConfirmation() {
   const {selectedRestaurantForPlanning} = useRestaurantInfo()
   const {confirmedEvent , user} = useUserData()
+
+const getTotal =()=>{
+  let priceRange = selectedRestaurantForPlanning.priceRange
+  let value = 0
+  if(priceRange === "Inexpensive"){
+    value = 10000
+  }
+  else if(priceRange === "Moderate"){
+    value = 20000
+  }
+  else if(priceRange === "Expensive"){
+    value = 30000
+  }
+  else if(priceRange === "Very Expensive"){
+    value = 50000
+  }
+
+  return value + (selectedRestaurantForPlanning.costPerPerson * confirmedEvent.guests)
+}
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 pt-6">
       <main className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -55,6 +76,13 @@ export function EventConfirmation() {
               <div className="flex items-center space-x-2">
                 <User className="h-5 w-5 text-muted-foreground" />
                 <span>{confirmedEvent.plannerName}</span>
+              </div>
+            </div>
+            <div className="border-t pt-4">
+              <h4 className="font-semibold mb-2">Total Cost</h4>
+              <div className="flex items-center space-x-2">
+                <DollarSign className="h-5 w-5 text-muted-foreground" />
+                <span>{getTotal()}</span>
               </div>
             </div>
           </CardContent>

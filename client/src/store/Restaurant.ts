@@ -27,6 +27,7 @@ export interface Restaurant {
     guests : number
     status : string
     plannedBy : string
+    
 
   }>;
   orders: Array<{
@@ -53,6 +54,7 @@ export interface Restaurant {
   closingTime: string;
   rating: number;
   isRestaurantRegistered: boolean
+  costPerPerson : number
 }
 interface Item {
 
@@ -99,7 +101,8 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
     openingTime: '',
     closingTime: '',
     rating: 0,
-    isRestaurantRegistered: false
+    isRestaurantRegistered: false,
+    costPerPerson : 0
   },
   loggedInRestaurant: {
     _id: '',
@@ -117,7 +120,8 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
     openingTime: '',
     closingTime: '',
     rating: 0,
-    isRestaurantRegistered: false
+    isRestaurantRegistered: false,
+    costPerPerson : 0
   },
   selectedRestaurant : {
     _id: '',
@@ -135,7 +139,8 @@ const useRestaurantInfo = create<RestaurantStore>((set) => ({
     openingTime: '',
     closingTime: '',
     rating: 0,
-    isRestaurantRegistered: false
+    isRestaurantRegistered: false,
+    costPerPerson : 0
   },
 
 

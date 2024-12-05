@@ -2,7 +2,7 @@
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Building2, MapPin, Phone, Users, Utensils,  Clock, ImageIcon, Star } from 'lucide-react'
+import { Building2, MapPin, Phone, Users, Utensils,  Clock, ImageIcon, Star, User } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -63,7 +63,11 @@ const formSchema = z.object({
     message: "Rating must be between 0 and 5."
   }).max(5 , {
     message: "Rating must be between 0 and 5."
-  })
+  }),
+  costPerPerson: z.number().min(0, {
+    message: "Cost per person must be at least 0.",
+  
+  }) 
 })
 
 export function RestaurantRegister() {
@@ -86,7 +90,8 @@ export function RestaurantRegister() {
       image: "",
       openingTime: "",
       closingTime: "",
-      rating : 0
+      rating : 0,
+      costPerPerson : 0
     },
   })
 
@@ -314,6 +319,21 @@ export function RestaurantRegister() {
                       <FormMessage />
                     </FormItem>
                   )}
+                />
+                <FormField 
+                control={form.control}
+                name ="costPerPerson"
+                render={({field})=>(
+                  <FormItem>
+                    <FormLabel>Cost For Each Person</FormLabel>
+                    <FormControl>
+                      <div className='relative'>
+                        <User className='absolute left 2 top-2.5 h-4 w-4 text-gray-500 ' />
+                        <Input type='number' placeholder='Enter cost for each person for event planning' {...field} onChange={(e)=>field.onChange(Number(e.target.value))}/>
+                      </div>
+                    </FormControl>
+                  </FormItem>
+                )}
                 />
                 <Button type="submit" className="w-full">Register Restaurant</Button>
               </form>

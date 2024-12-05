@@ -1,5 +1,5 @@
 
-import { MapPin, Phone, Users, Clock, DollarSign, Utensils, Star  } from 'lucide-react'
+import { MapPin, Phone, Users, Clock, DollarSign, Utensils, Star, User  } from 'lucide-react'
 import { LuMartini } from "react-icons/lu";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -78,6 +78,11 @@ export function RestaurantDetails() {
               <div className="flex items-center space-x-2">
                 <Utensils className="h-5 w-5 text-muted-foreground" />
                 <span>{selectedRestaurantForPlanning.cuisine}</span>
+                
+              </div>
+              <div className="flex items-center space-x-2">
+                <User className="h-5 w-5 text-muted-foreground" />
+                <span>{selectedRestaurantForPlanning.costPerPerson} Per Person</span>
                 
               </div>
             </div>
