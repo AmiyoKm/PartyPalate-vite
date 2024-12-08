@@ -62,7 +62,7 @@ export function CustomerOrders() {
       }
     } 
     fetchOrders();
-  }, [handleUpdateOrderStars]);
+  }, [orders]);
   const reversedOrders = [...orders].reverse();
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">

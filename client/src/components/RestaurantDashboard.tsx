@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Link } from 'react-router-dom'
 import useUserData from '@/store/auth'
+import { useEffect } from 'react'
 
 
 
@@ -42,6 +43,10 @@ export function RestaurantDashboard() {
   const handleDeleteOrder = async (id: string) => {
     deleteOrder(restaurant._id , id , token)
   }
+
+  useEffect(()=>{
+    console.log(restaurant);
+  },[restaurant])
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">

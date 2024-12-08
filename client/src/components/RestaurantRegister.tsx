@@ -329,7 +329,7 @@ export function RestaurantRegister() {
                     <FormControl>
                       <div className='relative'>
                         <User className='absolute left 2 top-2.5 h-4 w-4 text-gray-500 ' />
-                        <Input type='number' placeholder='Enter cost for each person for event planning' {...field} onChange={(e)=>field.onChange(Number(e.target.value))}/>
+                        <Input type='number' className="pl-8" placeholder='Enter cost for each person for event planning' {...field} onChange={(e)=>field.onChange(Number(e.target.value))}/>
                       </div>
                     </FormControl>
                   </FormItem>

@@ -107,7 +107,8 @@ const useCart = create<useCart>((set) => ({
             const res =await axios.post(`/api/v1/customer/${selectedRestaurant._id}/orders`, {
                 name : name ,
                 items : cart ,
-                total
+                total,
+                status : "preparing"
             } ,{
                 headers: {
                     Authorization: `Bearer ${token}`

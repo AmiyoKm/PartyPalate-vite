@@ -28,7 +28,7 @@ const getOrders = async(req,res) =>{
 }
 
 const createOrder = async (req, res) => {
-    const { items, total, status , name } = req.body;
+    const { items, total,status,  name } = req.body;
     const { restaurantId } = req.params;
     const userId = req.user._id;
   
@@ -38,9 +38,7 @@ const createOrder = async (req, res) => {
       items,
       name,
       total,
-      status,
-      review,
-      stars,
+      status,    
       orderedBy: userId,
       restaurant: restaurantId,
     };
@@ -57,8 +55,6 @@ const createOrder = async (req, res) => {
       _id: newOrder._id, // Use the same _id
       items,
       total,
-      review,
-      stars,
       status,
       restaurant: restaurantId,
     };
@@ -70,13 +66,13 @@ const createOrder = async (req, res) => {
     );
   
     // Check for errors
+    if (!restaurant) {
+      throw new NotFoundError(`No restaurant with id: ${restaurantId}`);
+    }
     if (!customer || !restaurant) {
       throw new BadRequestError("Customer or restaurant doesn't exist");
     }
   
-    if (!restaurant) {
-      throw new NotFoundError(`No restaurant with id: ${restaurantId}`);
-    }
   
     // Return the newly created order with its _id
     res.status(StatusCodes.OK).json({ order: customerOrder });
