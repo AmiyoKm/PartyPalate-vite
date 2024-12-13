@@ -138,7 +138,7 @@ export function RestaurantMenu() {
               <CardHeader className='p-0 mb-4'>
                 <img src={item.image} alt={item.itemName} className="w-full h-48 object-cover rounded-t-lg" />
                 <CardTitle className='pl-6'>{item.itemName}</CardTitle>
-                <CardDescription className='pl-6'>${item.price.toFixed(2)}</CardDescription>
+                <CardDescription className='pl-6'>৳ {item.price.toFixed(2)}</CardDescription>
               </CardHeader>
               <CardContent>
                 <p>{item.description}</p>

@@ -95,6 +95,7 @@ const getMenu = async (req , res) => {
 const updateRestaurant = async(req, res)=> {
     try {
         const {id : restaurantId} = req.params
+        
         const restaurant = await Restaurant.findOneAndUpdate({_id : restaurantId} , req.body , { new : true , runValidator : true})
         if(!restaurant){
             throw new NotFoundError(`No restaurant with id : ${restaurantId}`)

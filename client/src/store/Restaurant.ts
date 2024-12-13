@@ -21,7 +21,7 @@ export interface Restaurant {
   }>;
   events: Array<{
     eventName: string;
-    date: string;
+    date: Date;
     time: string;
     description: string;
     _id: string;

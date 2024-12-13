@@ -43,10 +43,8 @@ export function CustomerOrders() {
     }
   };
   const handleUpdateOrderStars =async (order : Order, index : number) => {
-   // console.log(order, index);
     const newOrder = { ...order, stars: index + 1 };
     await updateOrderCustomer(user._id , order._id , newOrder , token)
-    //console.log(res.msg);
     
   }
   const handleReview =(order : Order)=>{
@@ -83,7 +81,7 @@ export function CustomerOrders() {
                     </Badge>
                   </div>
                   <CardDescription className="text-lg font-semibold">
-                    Total: ${order.total.toFixed(2)}
+                    Total: ৳ {order.total.toFixed(2)}
                   </CardDescription>
                 </div>
               </CardHeader>

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { format } from "date-fns"
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -12,6 +12,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,25 +20,29 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 
-import { Clock, CreditCard, Users } from "lucide-react";
+import { CalendarIcon, Clock, CreditCard, Users } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import useUserData from "@/store/auth";
 import useRestaurantInfo from "@/store/Restaurant";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Calendar } from "./ui/calendar";
+import { cn } from "@/lib/utils";
 
 
 const formSchema = z.object({
   eventName: z.string().min(2, {
     message: "Event name must be at least 2 characters.",
   }),
-  date: z.string({
+  date: z.date({
     required_error: "Date is required.",
   }),
   time: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
     message: "Please enter a valid time in HH:MM format.",
   }),
+  
   description: z.string().min(10, {
     message: "description must be at least 10 characters",
   }),
@@ -87,7 +92,7 @@ const ConfirmEvent = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       eventName: "",
-      date: "",
+      date: new Date(),
       time: "",
       description: "",
       guests: 0,
@@ -97,7 +102,9 @@ const ConfirmEvent = () => {
       cvv: "",
     },
   });
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) { 
+    console.log(values);
+    
    const res =  await createEvent(selectedRestaurantForPlanning._id , values , token)
 
    if(res.success){
@@ -144,7 +151,7 @@ const ConfirmEvent = () => {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="date"
                   render={({ field }) => (
@@ -160,7 +167,52 @@ const ConfirmEvent = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
+                <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date of event</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date < new Date()
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                Select which date you want to book the event for.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
                 <FormField
                   control={form.control}
                   name="time"
@@ -273,7 +325,7 @@ const ConfirmEvent = () => {
                             />
                         </div>
                     </div>
-                    <Button type="submit" className="w-full">Pay {getTotal().toLocaleString()} $</Button>
+                    <Button type="submit" className="w-full">Pay {getTotal().toLocaleString()} ৳</Button>
               </form>
             </Form>
           </CardContent>

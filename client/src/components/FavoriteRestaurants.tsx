@@ -94,9 +94,9 @@ const FavoriteRestaurants = () => {
                 
                 <CardFooter>
                   <div className='flex flex-col w-full space-y-3'>
-                    {/* <Link to ={`/restaurant/${user._id}/menu`}> */}
+                
                     <Button onClick={()=> handleGoToRestaurantMenu(restaurant)} className="w-full" variant='outline'>View Details</Button>
-                    {/* </Link> */}
+                   
                 
                   <Button
                     variant="destructive"

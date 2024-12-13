@@ -61,7 +61,7 @@ const handleAddToCart = (item : Item) => {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle>{item.itemName}</CardTitle>
-                    <Badge variant="secondary">${item.price.toFixed(2)}</Badge>
+                    <Badge variant="secondary">৳ {item.price.toFixed(2)}</Badge>
                   </div>
                 </CardHeader>
                 <CardContent>

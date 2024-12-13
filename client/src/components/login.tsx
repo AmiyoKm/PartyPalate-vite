@@ -80,7 +80,6 @@ export function Login() {
       
     }
     
-    //console.log(res.msg);
   }
   return (
     <div className="flex h-screen w-full items-center justify-center px-4">
@@ -129,9 +128,6 @@ export function Login() {
             </div>
             <Button onClick={handleSubmit} type="submit" className="w-full">
               Login
-            </Button>
-            <Button variant="outline" className="w-full">
-              Login with Google
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">

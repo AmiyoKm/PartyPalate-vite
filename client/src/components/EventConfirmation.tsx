@@ -52,7 +52,7 @@ const getTotal =()=>{
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center space-x-2">
                 <CalendarIcon className="h-5 w-5 text-muted-foreground" />
-                <span>{confirmedEvent.date}</span>
+                <span>{confirmedEvent.date.toLocaleDateString()}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Clock className="h-5 w-5 text-muted-foreground" />
@@ -82,7 +82,7 @@ const getTotal =()=>{
               <h4 className="font-semibold mb-2">Total Cost</h4>
               <div className="flex items-center space-x-2">
                 <DollarSign className="h-5 w-5 text-muted-foreground" />
-                <span>{getTotal()}</span>
+                <span>{getTotal()} ৳</span>
               </div>
             </div>
           </CardContent>

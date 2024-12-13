@@ -50,10 +50,6 @@ export function HomePageComponent() {
 
  const filteredRestaurants = restaurants.filter((restaurant)=> restaurant.restaurantName.toLowerCase().includes(search.toLowerCase()));
 
-// const handleSearch =(search : string)=>{
-//   const filteredRestaurants = selectedRestaurants.filter((restaurant)=> restaurant.restaurantName.toLowerCase().includes(search.toLowerCase()));
-//   setSelectedRestaurants(filteredRestaurants);
-// }
 const handleAddToFavorite = async(restaurant : Restaurant)=>{
 
  const res = await addFavorite(customer._id ,restaurant ,token)
@@ -117,7 +113,7 @@ useEffect(() => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
                   {restaurant.menu.map((item) => (
-                    // <Link to={`/customer/${user._id}/item/${restaurant._id}/${item._id}`}>
+                    
                     <Card className="overflow-hidden flex flex-col hover:scale-105 cursor-pointer transition-all duration-300">
                       <div onClick={()=>handleFoodItemClick(user._id , restaurant , item._id)} >
                       <CardHeader  className="p-0">
@@ -130,7 +126,7 @@ useEffect(() => {
                       <CardContent className="p-4 flex-grow">
                         <CardTitle className="text-lg mb-2">{item.itemName}</CardTitle>
                         <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{item.description}</p>
-                        <p className="font-bold text-lg mb-2">${item.price.toFixed(2)}</p>
+                        <p className="font-bold text-lg mb-2">৳ {item.price.toFixed(2)}</p>
                       </CardContent>
                       </div>
                       

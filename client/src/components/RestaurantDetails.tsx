@@ -76,7 +76,7 @@ navigate(`/event-planning/customer/${user._id}/${selectedRestaurantForPlanning._
               </div>
               <div className="flex items-center space-x-2">
                 <Clock className="h-5 w-5 text-muted-foreground" />
-                <span>{selectedRestaurantForPlanning.openingTime} - {selectedRestaurantForPlanning.closingTime}</span>
+                <span>{selectedRestaurantForPlanning.openingTime} am - {selectedRestaurantForPlanning.closingTime} pm</span>
               </div>
               <div className="flex items-center space-x-2">
                 <DollarSign className="h-5 w-5 text-muted-foreground" />

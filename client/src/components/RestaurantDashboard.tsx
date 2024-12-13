@@ -13,20 +13,17 @@ import { useEffect } from 'react'
 
 
 export function RestaurantDashboard() {
-  const { token ,restaurant , updateOrder ,deleteOrder ,updateEventForRestaurant ,deleteEvent ,user } = useUserData() 
-
-  
-
-
- 
+  const { token ,restaurant , updateOrder ,deleteOrder ,updateEventForRestaurant ,deleteEvent ,user , getSingleRestaurant} = useUserData() 
 
   const handleUpdateEventStatus = async ( event : any , value : string) => {
     const updatedEvent = { ...event , status : value}
     updateEventForRestaurant(restaurant._id , updatedEvent , token)
+    await  getSingleRestaurant(restaurant._id , token)
   }
 
   const handleDeleteEvent = async (event :any) => {
     deleteEvent(user._id , event._id , token) 
+    await  getSingleRestaurant(restaurant._id , token)
    
   }
 
@@ -38,15 +35,26 @@ export function RestaurantDashboard() {
     console.log(updatedOrder);
     
     updateOrder(restaurant._id , id , updatedOrder , token)
+    await  getSingleRestaurant(restaurant._id , token)
   }
 
   const handleDeleteOrder = async (id: string) => {
     deleteOrder(restaurant._id , id , token)
+   await  getSingleRestaurant(restaurant._id , token)
   }
-
+  const dates = (date: string | Date) => {
+    if (typeof date === "string") return date;
+    if (date instanceof Date) return date.toLocaleDateString();
+    return "";
+  };
   useEffect(()=>{
-    console.log(restaurant);
-  },[restaurant])
+    async function fetchRestaurant(){
+     await getSingleRestaurant(restaurant._id , token)
+     setInterval(()=> getSingleRestaurant(restaurant._id , token), 3000)
+
+    }
+    fetchRestaurant()
+  },[restaurant._id, token, getSingleRestaurant])
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -79,7 +87,7 @@ export function RestaurantDashboard() {
                           </div>
                           <div className="flex items-center mt-1">
                             <Calendar className="w-4 h-4 mr-1" />
-                            {event.date}
+                            {dates(event.date)}
                           </div>
                           <div className="flex items-center mt-1">
                             <Clock className="w-4 h-4 mr-1" />
@@ -160,7 +168,7 @@ export function RestaurantDashboard() {
                           } ).join(", ")}
                         </div>
                         <div className="text-sm font-medium mt-1">
-                          Total: ${order.total.toFixed(2)}
+                          Total: ৳ {order.total.toFixed(2)}
                         </div>
                         <div className="text-lg font-medium mt-1 text-primary">
                           Review : {order.review}

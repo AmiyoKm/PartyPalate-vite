@@ -62,6 +62,10 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
+const offDaysForPlanningSchema = new mongoose.Schema({
+  date : {type : String , required : true}
+})
+
 const restaurantSchema = new mongoose.Schema({
   restaurantName: {
     type: String,
@@ -99,6 +103,7 @@ const restaurantSchema = new mongoose.Schema({
   },
   isRestaurantOpenForOrder: { type: String ,enum : ["ON" , "OFF"], default: "ON" },
   isRestaurantOpenForEvent : { type: String ,enum : ["ON" , "OFF"], default: "ON" },
+  noPlanningEventsDates : [offDaysForPlanningSchema] ,
 });
 
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);

@@ -37,6 +37,11 @@ export function EventManagement() {
    
    await updateEventForCustomer(user._id , updatedEvent , token)
  }
+ const dates = (date: String | Date) => {
+  if (typeof date === "string") return date;
+  if (date instanceof Date) return date.toLocaleDateString();
+  return "";
+};
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
    
@@ -68,7 +73,7 @@ export function EventManagement() {
                         <TableCell>
                           <div className="flex items-center">
                             <Calendar className="w-4 h-4 mr-2" />
-                            {event.date}
+                            {dates(event.date)}
                           </div>
                           <div className="flex items-center mt-1">
                             <Clock className="w-4 h-4 mr-2" />

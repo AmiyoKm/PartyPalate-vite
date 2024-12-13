@@ -23,6 +23,7 @@ import {
   Utensils,
   DollarSign,
   Users,
+
 } from "lucide-react";
 import useUserData from "@/store/auth";
 import {
@@ -91,188 +92,229 @@ export function RestaurantProfile() {
                   <div className="space-y-2">
                     <Label htmlFor="name">Restaurant Name</Label>
                     <div className="flex items-center space-x-3">
-                    <Building2 className="w-4 h-4 text-gray-500" />
-                    <Input
-                      id="name"
-                      name="name"
-                      value={restaurantData.restaurantName}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                    />
+                      <Building2 className="w-4 h-4 text-gray-500" />
+                      <Input
+                        id="name"
+                        name="name"
+                        value={restaurantData.restaurantName}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
-                  
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone</Label> 
+                    <Label htmlFor="phone">Phone</Label>
                     <div className="flex items-center space-x-3">
-                    <Phone className="w-4 h-4 text-gray-500" />
-                    <Input
-                      id="phone"
-                      name="phone"
-                      value={restaurantData.phone}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                    />
+                      <Phone className="w-4 h-4 text-gray-500" />
+                      <Input
+                        id="phone"
+                        name="phone"
+                        value={restaurantData.phone}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="address">Address</Label>
                     <div className="flex items-center space-x-3">
-                    <MapPin className="w-4 h-4 text-gray-500" />
-                    <Input
-                      id="address"
-                      name="address"
-                      value={restaurantData.address}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                    />
+                      <MapPin className="w-4 h-4 text-gray-500" />
+                      <Input
+                        id="address"
+                        name="address"
+                        value={restaurantData.address}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="cuisine">Cuisine</Label>
                     <div className="flex items-center space-x-3">
-                    <Utensils className="w-4 h-4 text-gray-500" />
-                    <Input
-                      id="cuisine"
-                      name="cuisine"
-                      value={restaurantData.cuisine}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                    />
+                      <Utensils className="w-4 h-4 text-gray-500" />
+                      <Input
+                        id="cuisine"
+                        name="cuisine"
+                        value={restaurantData.cuisine}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="priceRange">Price Range</Label>
                     <div className="flex items-center space-x-3">
-                    <DollarSign className="w-4 h-4 text-gray-500" />
-                    <Select
-                      name="priceRange"
-                      value={restaurantData.priceRange}
-                      disabled={!isEditing}
-                      onValueChange={(value) =>
-                        setRestaurantData((prev) => ({
-                          ...prev,
-                          priceRange: value,
-                        }))
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={restaurantData.priceRange} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="Inexpensive">
-                            Inexpensive
-                          </SelectItem>
-                          <SelectItem value="Moderate">Moderate</SelectItem>
-                          <SelectItem value="Expensive">Expensive</SelectItem>
-                          <SelectItem value="Very Expensive">
-                            Very Expensive
-                          </SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                      <DollarSign className="w-4 h-4 text-gray-500" />
+                      <Select
+                        name="priceRange"
+                        value={restaurantData.priceRange}
+                        disabled={!isEditing}
+                        onValueChange={(value) =>
+                          setRestaurantData((prev) => ({
+                            ...prev,
+                            priceRange: value,
+                          }))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={restaurantData.priceRange}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="Inexpensive">
+                              Inexpensive
+                            </SelectItem>
+                            <SelectItem value="Moderate">Moderate</SelectItem>
+                            <SelectItem value="Expensive">Expensive</SelectItem>
+                            <SelectItem value="Very Expensive">
+                              Very Expensive
+                            </SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="capacity">Capacity</Label>
                     <div className="flex items-center space-x-3">
-                    <Users className="w-4 h-4 text-gray-500" />
-                    <Input
-                      id="capacity"
-                      name="capacity"
-                      type="number"
-                      value={restaurantData.capacity}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                    />
+                      <Users className="w-4 h-4 text-gray-500" />
+                      <Input
+                        id="capacity"
+                        name="capacity"
+                        type="number"
+                        value={restaurantData.capacity}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="openingHours">Opening Hours</Label>
+                    <Label htmlFor="openingHours">Opening Hours (am)</Label>
                     <div className="flex items-center space-x-3">
-                    <Clock className="w-4 h-4 text-gray-500" />
-                    <Input
-                      id="openingHours"
-                      name="openingHours"
-                      value={restaurantData.openingTime}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                    />
+                      <Clock className="w-4 h-4 text-gray-500" />
+                      <Input
+                        id="openingHours"
+                        name="openingHours"
+                        value={restaurantData.openingTime}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="openingHours">Closing Hours</Label>
+                    <Label htmlFor="openingHours">Closing Hours (pm)</Label>
                     <div className="flex items-center space-x-3">
-                    <Clock className="w-4 h-4 text-gray-500" />
-                    <Input
-                      id="openingHours"
-                      name="openingHours"
-                      value={restaurantData.closingTime}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                    />
+                      <Clock className="w-4 h-4 text-gray-500" />
+                      <Input
+                        id="openingHours"
+                        name="openingHours"
+                        value={restaurantData.closingTime}
+                        onChange={handleInputChange}
+                        disabled={!isEditing}
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label>Turn ON/OFF Taking Orders</Label>
                     <div className="flex items-center space-x-3">
-                    <Select disabled={!isEditing} name="isRestaurantOpenForOrder"
-                      value={restaurantData.isRestaurantOpenForOrder} onValueChange={(value)=> setRestaurantData((prev)=>  ({...prev , isRestaurantOpenForOrder : value}))}>
-                      <SelectTrigger  className={`${restaurantData.isRestaurantOpenForOrder === "ON" ? "bg-green-400 text-white" : "bg-red-500 text-white"}`}>
-                        <SelectValue placeholder={restaurantData.isRestaurantOpenForOrder} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="ON">ON</SelectItem>
-                          <SelectItem value="OFF">OFF</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                      <Select
+                        disabled={!isEditing}
+                        name="isRestaurantOpenForOrder"
+                        value={restaurantData.isRestaurantOpenForOrder}
+                        onValueChange={(value) =>
+                          setRestaurantData((prev) => ({
+                            ...prev,
+                            isRestaurantOpenForOrder: value,
+                          }))
+                        }
+                      >
+                        <SelectTrigger
+                          className={`${
+                            restaurantData.isRestaurantOpenForOrder === "ON"
+                              ? "bg-green-400 text-white"
+                              : "bg-red-500 text-white"
+                          }`}
+                        >
+                          <SelectValue
+                            placeholder={
+                              restaurantData.isRestaurantOpenForOrder
+                            }
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="ON">ON</SelectItem>
+                            <SelectItem value="OFF">OFF</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                   <div className="space-y-2">
                     <Label>Turn ON/OFF Events</Label>
                     <div className="flex items-center space-x-3">
-                    <Select   disabled={!isEditing} name="isRestaurantOpenForEvent"
-                      value={restaurantData.isRestaurantOpenForEvent} onValueChange={(value)=> setRestaurantData((prev)=>  ({...prev , isRestaurantOpenForEvent : value}))}>
-                      <SelectTrigger className={`${restaurantData.isRestaurantOpenForEvent === "ON" ? "bg-green-400 text-white" : "bg-red-500 text-white"}`}>
-                        <SelectValue placeholder={restaurantData.isRestaurantOpenForEvent} />
-                      </SelectTrigger>
-                      <SelectContent >
-                        <SelectGroup >
-                          <SelectItem value="ON">ON</SelectItem>
-                          <SelectItem value="OFF">OFF</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                      <Select
+                        disabled={!isEditing}
+                        name="isRestaurantOpenForEvent"
+                        value={restaurantData.isRestaurantOpenForEvent}
+                        onValueChange={(value) =>
+                          setRestaurantData((prev) => ({
+                            ...prev,
+                            isRestaurantOpenForEvent: value,
+                          }))
+                        }
+                      >
+                        <SelectTrigger
+                          className={`${
+                            restaurantData.isRestaurantOpenForEvent === "ON"
+                              ? "bg-green-400 text-white"
+                              : "bg-red-500 text-white"
+                          }`}
+                        >
+                          <SelectValue
+                            placeholder={
+                              restaurantData.isRestaurantOpenForEvent
+                            }
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="ON">ON</SelectItem>
+                            <SelectItem value="OFF">OFF</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>
+               
+                
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
                   <div className="flex items-center space-x-3">
-                  <Textarea
-                    id="description"
-                    name="description"
-                    value={restaurantData.description}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    rows={3}
-                  />
+                    <Textarea
+                      id="description"
+                      name="description"
+                      value={restaurantData.description}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      rows={3}
+                    />
                   </div>
                 </div>
                 <div>
                   <Label htmlFor="image">Image URL</Label>
                   <div className="flex items-center space-x-3">
-                  <Input
-                    id="image"
-                    name="image"
-                    value={restaurantData.image}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                  />
+                    <Input
+                      id="image"
+                      name="image"
+                      value={restaurantData.image}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                    />
                   </div>
                 </div>
               </form>

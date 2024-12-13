@@ -57,7 +57,7 @@ export function FoodItemDetails() {
               <p className="text-sm text-muted-foreground">{restaurantName}</p>
               <div className="flex justify-between items-center">
                 <Badge variant="secondary" className="text-lg">
-                  ${Number(item.price)}
+                ৳ {Number(item.price)}
                 </Badge>
               </div>
             </div>

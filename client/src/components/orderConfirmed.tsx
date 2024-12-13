@@ -45,7 +45,7 @@ export function OrderConfirmedPageComponent() {
                 {order.items.map((item, index) => (
                   <li key={index} className="flex justify-between">
                     <span>{item.quantity}x {item.itemName}</span>
-                    <span>${(item.quantity * item.price).toFixed(2)}</span>
+                    <span>৳ {(item.quantity * item.price).toFixed(2)}</span>
                   </li>
                 ))}
               </ul>
@@ -54,15 +54,15 @@ export function OrderConfirmedPageComponent() {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>${total.toFixed(2)}</span>
+                <span>৳ {total.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Tax</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>৳ {tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold">
                 <span>Total</span>
-                <span>${grandTotal.toFixed(2)}</span>
+                <span>৳ {grandTotal.toFixed(2)}</span>
               </div>
             </div>
           </CardContent>

@@ -18,7 +18,7 @@ interface Customer {
     _id : string
     events : Array<{
         eventName: string;
-        date: string;
+        date: Date | String;
         time: string;
         description?: string;
         _id: string;
@@ -57,7 +57,7 @@ interface Restaurant {
     }>;
     events: Array<{
         eventName: string;
-        date: string;
+        date: Date;
         time: string;
         description: string;
         _id: string;
@@ -87,7 +87,7 @@ interface Restaurant {
 }
 interface ConfirmedEvent{
     eventName : string
-    date : string
+    date : Date
     time : string
    
     description : string
@@ -128,6 +128,7 @@ interface UserData {
     handleRemoveFromFavorite : (id : string) => void
     setToken : (token : string) => void
     updateOrderCustomer : (customerId : string , orderId : string , order : any , token : string) => Promise<({ success: boolean; msg: any })>
+    getSingleRestaurant : (restaurantId : string , token : string) => Promise<({ success: boolean; msg: any })>
 }
  const useUserData = create<UserData>((set)=>({
     user : {
@@ -156,6 +157,7 @@ interface UserData {
       restaurantName: '',
       isRestaurantOpenForOrder:"ON" ,
       isRestaurantOpenForEvent : "ON" ,
+ 
       address: '',
       image : '',
       phone: '',
@@ -175,7 +177,7 @@ interface UserData {
     favoriteRestaurants : [],
     confirmedEvent : {
         eventName : '',
-        date : '',
+        date : new Date(),
         time : '',
         description : '',
         guests : 0,
@@ -291,6 +293,7 @@ interface UserData {
               closingTime : '',
               isRestaurantOpenForOrder: "ON" , 
               isRestaurantOpenForEvent : "ON",
+               
                 menu: [],
                 events: [],
                 orders: [],
@@ -431,7 +434,7 @@ interface UserData {
 },
     updateRestaurant : async (restaurantId , formData , token) => {
         try {
-            const res = await axios.patch(`/api/v1/restaurant/${restaurantId}` , formData ,{
+            const res = await axios.patch(`/api/v1/restaurant/${restaurantId}` , formData  ,{
                 headers : {
                     Authorization : `Bearer ${token}`
                 }
@@ -558,6 +561,19 @@ createRestaurant: async (formData, token) => {
   },
   handleRemoveFromFavorite : (id: string)=> {
     set((state) => ({ favoriteRestaurants: state.favoriteRestaurants.filter((restaurant) => restaurant._id !== id) }));
+  },
+  getSingleRestaurant : async(restaurantId : string , token : string) => {
+    try {
+        const response = await axios.get(`/api/v1/restaurant/${restaurantId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        set((state) => ({ restaurant: state.restaurant = response.data.restaurant }));
+        return { success: true, msg: response.data.restaurant };
+    } catch (error) {
+        return { success: false, msg: "Something went wrong" };
+    }
   }
 
 

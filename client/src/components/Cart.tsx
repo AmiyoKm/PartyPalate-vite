@@ -41,7 +41,7 @@ export function Cart() {
                         <img src={item.image} alt={item.itemName} className="w-12 h-12 object-cover rounded mr-4" />
                         {item.itemName}
                       </TableCell>
-                      <TableCell>${item.price.toFixed(2)}</TableCell>
+                      <TableCell>৳ {item.price.toFixed(2)}</TableCell>
                       <TableCell>
                         <div className="flex items-center">
                           <Button variant="outline" size="icon" onClick={()=>removeOneItemFromCart(item)}>
@@ -53,7 +53,7 @@ export function Cart() {
                           </Button>
                         </div>
                       </TableCell>
-                      <TableCell>${(item.price * item.quantity).toFixed(2)}</TableCell>
+                      <TableCell>৳ {(item.price * item.quantity).toFixed(2)}</TableCell>
                       <TableCell>
                         <Button variant="ghost" size="icon" onClick={() => removeFromCart(item)}>
                           <Trash2 className="h-4 w-4" />
@@ -66,7 +66,7 @@ export function Cart() {
               
               <div className="p-4 flex justify-between items-center">
              
-                <div className="text-lg font-semibold">Total: ${total.toFixed(2)}</div>
+                <div className="text-lg font-semibold">Total: ৳ {total.toFixed(2)}</div>
                 <Link to={`/customer/payment/${user._id}`}>
                 <Button>Proceed to Checkout</Button>
                 </Link>
