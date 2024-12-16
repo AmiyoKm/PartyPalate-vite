@@ -32,42 +32,46 @@ import { Calendar } from "./ui/calendar";
 import { cn } from "@/lib/utils";
 
 
-const formSchema = z.object({
-  eventName: z.string().min(2, {
-    message: "Event name must be at least 2 characters.",
-  }),
-  date: z.date({
-    required_error: "Date is required.",
-  }),
-  time: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
-    message: "Please enter a valid time in HH:MM format.",
-  }),
-  
-  description: z.string().min(10, {
-    message: "description must be at least 10 characters",
-  }),
-  guests: z.number().min(1, {
-    message: "Guests must be at least 1.",
-  }),
-  plannerName: z.string().min(2, {
-    message: "Planner name must be at least 2 characters.",
-  }),
-  cardNumber: z.string().regex(/^\d{16}$/, {
-    message: "Card number must be 16 digits",
-  }),
-  expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, {
-    message: "Please enter a valid expiry date in MM/YY format.",
-  }),
-  cvv: z.string().regex(/^\d{3}$/, {
-    message: "Please enter a valid CVV.",
-  }),
-});
+
 
 const ConfirmEvent = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user , token , createEvent } = useUserData();
   const {selectedRestaurantForPlanning}=useRestaurantInfo()
+
+  const formSchema = z.object({
+    eventName: z.string().min(2, {
+      message: "Event name must be at least 2 characters.",
+    }),
+    date: z.date({
+      required_error: "Date is required.",
+    }),
+    time: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
+      message: "Please enter a valid time in HH:MM format.",
+    }),
+    
+    description: z.string().min(10, {
+      message: "description must be at least 10 characters",
+    }),
+    guests: z.number().min(1, {
+      message: "Guests must be at least 1.",
+    }).max(selectedRestaurantForPlanning.capacity ,{
+      message: `Guests must be at most ${selectedRestaurantForPlanning.capacity}. ${selectedRestaurantForPlanning.restaurantName} can't accommodate more than ${selectedRestaurantForPlanning.capacity} guests. `
+    }),
+    plannerName: z.string().min(2, {
+      message: "Planner name must be at least 2 characters.",
+    }),
+    cardNumber: z.string().regex(/^\d{16}$/, {
+      message: "Card number must be 16 digits",
+    }),
+    expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, {
+      message: "Please enter a valid expiry date in MM/YY format.", 
+    }),
+    cvv: z.string().regex(/^\d{4}$/, {
+      message: "Please enter a valid CVV.",
+    }),
+  });
 
   const getTotal =()=>{
     let guests = form.watch("guests")
